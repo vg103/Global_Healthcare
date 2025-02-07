@@ -1,6 +1,7 @@
 # Global_Healthcare
-<<<<<<< HEAD
 Impact of Global Healthcare System
+
+Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic
 
 ### Project Type: Analysis
 
@@ -12,13 +13,3 @@ Impact of Global Healthcare System
 
 
 ### Data sources:
-=======
-Impact of Global Healthcare System\
-Members :-  
-* Jay Sanghavi
-* Gabi Diaz
-* Mina Nielsen
-* Vanja Glisic
-* Ceaser the Clown
-
->>>>>>> refs/remotes/origin/main

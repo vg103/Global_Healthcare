@@ -5,3 +5,5 @@ Members :-
 * Gabi Diaz
 * Mina Nielsen
 * Vanja Glisic
+* Ceaser the Clown
+

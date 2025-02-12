@@ -13,7 +13,6 @@ Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic
 
 ### Goal for the project output:
 - dashboard of data visualizations that speak to our various questions of interest
-- mini report of findings
 
 ### Data sources:
 - https://www.kaggle.com/datasets/malaiarasugraj/global-health-statistics

@@ -1,7 +1,7 @@
 # Global_Healthcare
 ## Impact of Global Healthcare System
 
-**Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic **
+**Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic**
 
 ### Project Type: Analysis
 

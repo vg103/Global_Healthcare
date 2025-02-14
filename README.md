@@ -4,7 +4,7 @@
 
 **Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic**
 
-### Project Type: Analysis
+### Project Type: Analysis/Tool
 
 ### Questions of Interest:
 

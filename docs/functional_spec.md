@@ -1,26 +1,33 @@
 # Functional Spec
 
+### Background
+
+### User Profiles:
+
 **User 1: Policymaker**
 
-	wants to know how good their county's healthcare system is, identify strengths and weaknesses to address in future policy, if the country has enough medical staff for their population
-	interacts by using the dashboard, filtering visualizations
-	needs to isolate the information for their specific country and compare with stats of other countries of their choosing
-	not technical, skills include graph comprehension and dashboard navigation
+	- wants to know how good their county's healthcare system is, identify strengths and weaknesses to address in future policy, if the country has enough medical staff for their population
+	- interacts by using the dashboard, filtering visualizations
+	- needs to isolate the information for their specific country and compare with stats of other countries of their choosing
+	- not technical, skills include graph comprehension and dashboard navigation
 
 **User 2: Person looking to move to a new country**
 
-	wants to see countries with top healthcare systems
-	interacts by using the dashboard, seeing average stats across all countries, highlighting top countries
-	needs to see which countries are at the top of different categories
-	not technical, skills include graph comprehension and dashboard navigation
+	- wants to see countries with top healthcare systems
+	- interacts by using the dashboard, seeing average stats across all countries, highlighting top countries
+	- needs to see which countries are at the top of different categories
+	- not technical, skills include graph comprehension and dashboard navigation
 
 **User 3: Journalist who communicates healthcare trends and issues to the public**
 
-	wants to compare healthcare systems across countries to highlight success factors and challenges
-	interacts by comparing countries 
-	needs to see high-level trends across countries and over time
-	Moderately non-technical; they understand the importance of data but are not experts in analytics.
+	- wants to compare healthcare systems across countries to highlight success factors and challenges
+	- interacts by comparing countries 
+	- needs to see high-level trends across countries and over time
+	- Moderately non-technical; they understand the importance of data but are not experts in analytics.
 
+### Data Sources
+
+### Use Cases
 
 **Use Case 1: Looking into a specifc country's healthcare**
 
@@ -29,7 +36,7 @@
     User: Decides to add in two more countries to compare metrics and trends
     System: Updates to include multiple countries
 
-**Use Case 2: See what countries have good access to healthcases**
+**Use Case 2: See what countries have good access to healthcare**
 
     User: Click on Page/Icon for graph to show healthcare access across countries
     System: Show bar chart comparing countries and percentage of population with healthcare access

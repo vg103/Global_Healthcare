@@ -27,6 +27,7 @@ This dashboard addresses the need for a data backed platform to help various typ
 	- Moderately non-technical; they understand the importance of data but are not experts in analytics.
 
 ### Data Sources
+to be merged over country, which is a field in all of the below datasets
 - [Institute for Health Metrics and Evaluation](https://vizhub.healthdata.org/gbd-results/)
 - build a sheet using data from this document [International Profiles of Health Care Systems](https://www.commonwealthfund.org/sites/default/files/2020-12/International_Profiles_of_Health_Care_Systems_Dec2020.pdf)
 - [WHO Global Health Workforce Data](https://www.who.int/data/gho/data/themes/topics/health-workforce)

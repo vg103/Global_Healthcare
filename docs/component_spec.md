@@ -46,7 +46,7 @@ Diagram for Use Case 1: Looking into a specifc country's healthcare
 ![Component1](comp1.png)
 
 Diagram for Use Case 2:
-
+![Component2](mermaid-diagram-2025-02-19-102850.png)
 
 
 

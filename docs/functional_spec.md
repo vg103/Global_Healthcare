@@ -12,6 +12,11 @@ This dashboard addresses the need for a data backed platform to help various typ
 	- needs to isolate the information for their specific country and compare with stats of other countries of their choosing
 	- not technical, skills include graph comprehension and dashboard navigation
 
+**User 2: Person looking to move to a new country**
+    - wants to see countries with top healthcare systems
+    - interacts by using the dashboard, seeing average stats across all countries, highlighting top countries
+    - needs to see which countries are at the top of different categories
+    - not technical, skills include graph comprehension and dashboard navigation
 
 **User 3: Journalist who communicates healthcare trends and issues to the public**
 

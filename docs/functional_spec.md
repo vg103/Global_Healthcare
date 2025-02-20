@@ -12,12 +12,6 @@ This dashboard addresses the need for a data backed platform to help various typ
 	- needs to isolate the information for their specific country and compare with stats of other countries of their choosing
 	- not technical, skills include graph comprehension and dashboard navigation
 
-**User 2: Person looking to move to a new country**
-
-	- wants to see countries with top healthcare systems
-	- interacts by using the dashboard, seeing average stats across all countries, highlighting top countries
-	- needs to see which countries are at the top of different categories
-	- not technical, skills include graph comprehension and dashboard navigation
 
 **User 3: Journalist who communicates healthcare trends and issues to the public**
 
@@ -42,26 +36,7 @@ to be merged over country, which is a field in all of the below datasets
     User: Decides to add in two more countries to compare metrics and trends
     System: Updates to include multiple countries
 
-**Use Case 2: See what countries have good access to healthcare**
-
-    User: Click on Page/Icon for graph to show healthcare access across countries
-    System: Show bar chart comparing countries and percentage of population with healthcare access
-    User: Visually detects countries with higher percentages
-
-**Use Case 3: Maintain and Update Dashboard: The system supports the technical user in maintaining the dashboard by integrating and updating data source**
-
-    User: Accesses the back-end data integration module.
-    System: Displays a list of connected data sources (e.g., WHO, Kaggle, international profiles).
-    User: Initiates a data refresh to pull the latest information from the sources.
-    System: Executes the data extraction, cleaning, and integration process.
-    User: Monitors the data pipeline status through a dedicated dashboard module.
-    System: Displays logs, error messages, and performance metrics for the data pipeline.
-    User: Adjusts dashboard configurations based on new data insights or feedback from non-technical users.
-    System: Updates visualizations and reports to reflect the latest data and improvements.
-    User: Schedules regular maintenance tasks for future updates.
-    System: Confirms the scheduling and displays upcoming maintenance tasks on the calendar view.
-
-**Use Case 4: Explore Global Healthcare Trends: The system enables the journalist to explore and extract global healthcare trends for storytelling**
+**Use Case 2: Explore Global Healthcare Trends: The system enables the journalist to explore and extract global healthcare trends for storytelling**
 
     User: Opens the dashboard and selects the “Global Trends” section.
     System: Presents interactive graphs and charts that depict various healthcare indicators across multiple countries.

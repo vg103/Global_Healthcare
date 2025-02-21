@@ -25,3 +25,18 @@
 - build a sheet using data from this document [International Profiles of Health Care Systems](https://www.commonwealthfund.org/sites/default/files/2020-12/International_Profiles_of_Health_Care_Systems_Dec2020.pdf)
 - [WHO Global Health Workforce Data](https://www.who.int/data/gho/data/themes/topics/health-workforce)
 - [World Deaths and Causes - Kaggle](https://www.kaggle.com/datasets/madhurpant/world-deaths-and-causes-1990-2019)
+
+
+
+### Environment Set-Up
+For version control, run the following line in the terminal to use package versions as specified in environment.yml:
+    
+    conda env create -f environment.yml
+
+To activate the environment, run the following:
+
+    conda activate 515final
+
+To update the conda environment after making a change to environment.yml, run the following:
+
+    conda env update -f environment.yml

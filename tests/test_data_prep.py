@@ -1,11 +1,11 @@
 import unittest
 import numpy as np
-from data_prep import data_prep
+from data_prep.data_prep import import_data
 
 class TestDataPrep(unittest.TestCase):
     def test_df_exists(self):
-        df = data_prep(data_path="data/data.csv")
-        num_rows = len(df.shape[0])
+        df = import_data(data_path="data/scraped_doc.csv")
+        num_rows = df.shape[0]
         self.assertGreater(num_rows, 0, "data is empty")
 
         

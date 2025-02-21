@@ -1,5 +1,6 @@
 # Global_Healthcare
-
+[![build_test](https://github.com/vg103/Global_Healthcare/actions/workflows/build_test.yml/badge.svg)](https://github.com/vg103/Global_Healthcare/actions/workflows/build_test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/vg103/Global_Healthcare/badge.svg?branch=main)](https://coveralls.io/github/vg103/Global_Healthcare?branch=main)
 ## Impact of Global Healthcare System
 
 **Gabrielle Diaz, Jay Sanghavi, Mina Nielsen, Vanja Glisic**

@@ -20,10 +20,8 @@ on:
 
 # A list of jobs to run as part of the workflow
 jobs:
-
   # Each job gets a name. This one builds/tests all branches.
   build_test:
-
     # Provide a runner. Options are listed on GitHub, but include
     # windows, ubuntu, and macos (latest, as well as specific versions)
     runs-on: ubuntu-latest
@@ -41,7 +39,7 @@ jobs:
     # GitHub will run the tests for each of these Python versions.
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     # The actual workflow steps!
     steps:
@@ -80,7 +78,7 @@ jobs:
       - name: Install additional development dependencies
         run: |
           conda install --yes coverage
-      
+
       # If there are any other steps in order for your tests to
       # run successfully, you can add those steps here!
 
@@ -124,8 +122,8 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

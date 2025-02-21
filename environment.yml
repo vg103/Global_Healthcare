@@ -2,7 +2,7 @@ name: 515final
 channels:
   - defaults
 dependencies:
-  - python=3.12
+  - python=3
   - pandas=2
   - matplotlib=3
   - seaborn=0

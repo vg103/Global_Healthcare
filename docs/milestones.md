@@ -1,27 +1,43 @@
 # Milestones
 
-#1 data cleaning and setup\
-    scrape data from insurance doc into an excel file\
-    merge all 3 data sources into 1 data set\
-    success: file is readable and we can call fields from across different data sources by country name\
+## 1. Data Cleaning and Setup
+- **Tasks:**
+  - Scrape data from insurance documents into an Excel file.
+  - Merge all three data sources into a unified dataset using the common "Country" field.
+- **Success Criteria:**
+  - The unified dataset is correctly merged and is queryable by country.
+  - Data is cleaned and standardized for further analysis.
+- **Related Component:** Data Manager
 
-#2 determine ranking algorithm\
-    research healthcare rankings from other organizations\
-    perform exploratory data analysis on which fields have greatest correlation with population health measures\
-    success: a formula that takes our many fields into account, with various weights, that contribute to a 'score' of a country's healthcare system\
+## 2. Determine Ranking Algorithm
+- **Tasks:**
+  - Research existing healthcare ranking methodologies.
+  - Perform exploratory data analysis on key health indicators.
+- **Success Criteria:**
+  - Develop a ranking formula that incorporates various weights and factors.
+  - Generate a numerical score representing each country's healthcare performance.
+- **Related Component:** Ranking Algorithm
 
-#3 generate filterable figures of interest\
-    determine figure packages to use\
-    ensure figures can be filtered when interacted with in final product\
-    success: a set of filterable figures that together address our research questions\
+## 3. Generate Filterable Figures
+- **Tasks:**
+  - Identify and integrate appropriate visualization libraries.
+  - Create interactive figures that support user filtering.
+- **Success Criteria:**
+  - Figures are filterable and update dynamically based on user inputs.
+- **Related Component:** Visualization Manager
 
-#4 set up web app interface for our dashboards\
-    research packages and methods to create an interactive interface\
-    success: we have a publicly accessible place to add our future figures to that will allow users to see and interact with our figures
+## 4. Set Up Web App Interface for Dashboards
+- **Tasks:**
+  - Develop a user-friendly web interface.
+  - Integrate filter controls and visualization display elements.
+- **Success Criteria:**
+  - The web interface is publicly accessible and responsive.
+- **Related Component:** Web App Interface
 
-#5 compile figures into interactive dashboard\
-    generate figures\
-    ensure certain figures can be filtered\
-    format figures in logical and user-friendly way\
-    make filter controls available to users\
-    success: users can filter and interact with our figures to answer users' questions\
+## 5. Compile Figures into an Interactive Dashboard
+- **Tasks:**
+  - Aggregate and arrange figures into a coherent dashboard layout.
+  - Implement interactivity (e.g., filtering, zooming, exporting).
+- **Success Criteria:**
+  - Users can interact with and filter the dashboard to explore healthcare trends.
+- **Related Components:** Visualization Manager, Web App Interface

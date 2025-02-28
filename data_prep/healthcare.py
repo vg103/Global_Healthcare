@@ -97,13 +97,15 @@ def main():
     df_WHO = pivot_WHO(data_WHO)
     df_IHME = drop_sex(df_IHME)
     df_IHME = ag_over_cause(df_IHME)
-    both_sources = pd.merge(df_IHME, df_WHO, how="outer", left_on=['location','year'],right_on=['Location','Period'])
+    both_sources = pd.merge(df_IHME, df_WHO, how="inner", left_on=['location','year'],right_on=['Location','Period'])
+    both_sources.info()
+    both_sources.info
     #both_sources = both_sources.drop('Location',axis='columns')
     #both_sources = both_sources.drop('Period',axis='columns')
     
     #graph_docs_by_country(df_WHO)
 
-    both_sources.to_csv('merged_data.csv',index=False)
+    both_sources.to_csv('inner_merged_data.csv',index=False)
 
     return
 

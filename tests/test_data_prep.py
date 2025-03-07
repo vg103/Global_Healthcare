@@ -11,7 +11,7 @@ class TestDataPrep(unittest.TestCase):
 
     def test_df_exists(self):
         """Test that the DataFrame is not empty after importing data."""
-        df = import_data(data_path="data/scraped_doc.csv")
+        df = import_data(data_path="data_prep/final_data/inner_merged_data.csv")
         num_rows = df.shape[0]
         self.assertGreater(num_rows, 0, "data is empty")
 

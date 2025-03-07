@@ -11,3 +11,4 @@ dependencies:
   - coverage=7
   - plotly=5
   - bokeh=3
+  - streamlit

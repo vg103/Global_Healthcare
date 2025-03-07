@@ -1,0 +1,9 @@
+ python==3
+ pandas==2
+ matplotlib==3
+ seaborn==0
+ pylint==3.3.3
+ numpy==2
+ coverage==7
+ plotly==5
+ bokeh==3

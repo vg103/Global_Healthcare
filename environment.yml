@@ -9,3 +9,5 @@ dependencies:
   - pylint=3.3.3
   - numpy=2
   - coverage=7
+  - plotly=5
+  - bokeh=3

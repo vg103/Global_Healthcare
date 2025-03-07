@@ -78,8 +78,6 @@ def ag_over_cause(df):
     df = df.drop('cause',axis='columns')
     return df
 
-<<<<<<< Updated upstream
-=======
 def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
     """Merges the four medical provider DataFrames into one DataFrame
     Args: four pandas DataFrames for each of the medical provider categories from WHO
@@ -96,9 +94,6 @@ def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
     pharm_df = pharm_df.rename(columns={'Value': 'Pharmacists per 10,000'})
     dent_df = dent_df.rename(columns={'Value': 'Dentists per 10,000'})
 
-    #import pandas as pd
-    # ^why is this here?
-
     # Inner merging four DataFrames on 'Location' and 'Period'
     merged_df = med_df.merge(nurse_df, on=['Location', 'Period'], how='inner') \
                .merge(pharm_df, on=['Location', 'Period'], how='inner') \
@@ -106,21 +101,19 @@ def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
 
     return merged_df
 
->>>>>>> Stashed changes
 def main():
     """Main function to run the code"""
     print(f"Current Directory: {os.getcwd()}")# Check your current working directory
 
     # Check if files is found
-<<<<<<< Updated upstream
-    file_path = "/home/nmina/Global_Healthcare/data/"
+    #file_path = "/home/nmina/Global_Healthcare/data/"
+    #file_path = '/home/gdiaz21/Global_Healthcare/data/'
     if os.path.exists(file_path):
         print(f"File found: {file_path}")
     else:
         print(f"File NOT found: {file_path}")
-=======
-    #file_path = "/home/nmina/Global_Healthcare/data/"
-    file_path = '/home/gdiaz21/Global_Healthcare/data/'
+
+    
     #if os.path.exists(file_path):
         #print(f"File found: {file_path}")
     #else:
@@ -131,10 +124,10 @@ def main():
     nurse_midwifes = import_data(file_path + r'nursery-midwifery.csv')
     pharms = import_data(file_path + r'pharmacists.csv')
     dentists = import_data(file_path + r'dentistry.csv')
+
     new_data_who = make_medical_data_df(med_docs, nurse_midwifes, pharms, dentists)
     new_data_who.to_csv('/home/gdiaz21/Global_Healthcare/data/new_data_who.csv')
     print(new_data_who.info())
->>>>>>> Stashed changes
 
     # read in WHO dataset
     # THE FUNCTIONALITY OF THIS CODE DEPENDS ON CURRENT WORKING DIRECTORY

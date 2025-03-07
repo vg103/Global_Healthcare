@@ -5,9 +5,6 @@ Code to read in, clean, and merge data from the
 import os
 
 import pandas as pd
-import plotly.express as px
-#import plotly.graph_objects as go
-# ^unused at time of commenting out
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -29,36 +26,8 @@ def pivot_ihme(df):
     pivoted_df = pivoted_df.reset_index()
     # Rename the columns for clarity
     pivoted_df = pivoted_df.rename(columns={'death': 'death_rate', 'incidence': 'incidence_rate'})
-    #pivoted_df.to_csv('/home/nmina/Global_Healthcare/data/pivotted_dataframe_IHME.csv',index=False)
-    #only run above line to save the pivoted dataframe to your local machine
+    pivoted_df.to_csv('final_data/final_IHME.csv',index=False)
     return pivoted_df
-
-def pivot_who(df):
-    """Pivots the WHO data to have one row per location
-    Args: pandas DataFrame, should only be called on the WHO df
-    Returns: the updated pandas DataFrame"""
-    pivoted_df = df.pivot_table(index=['ParentLocation', 'Location', 'Period'],
-                            columns='Indicator',
-                            values='Value',
-                            aggfunc='first')
-    # Reset the index if needed
-    pivoted_df = pivoted_df.reset_index()
-    pivoted_df = pivoted_df.drop('ParentLocation',axis='columns')
-    #pivoted_df.to_csv('/home/nmina/Global_Healthcare/data/pivotted_dataframe_WHO.csv', index=False)
-    #only run above line to save the pivoted dataframe to your local machine
-    return pivoted_df
-
-def graph_docs_by_country(df):
-    """Graphs the number of medical doctors per 10,000 people in the population 
-        for each country in 2023
-    Args: pandas DataFrame
-    Returns: None"""
-    # filter to the year 2023
-    df_2023 = df[df['Period'] == 2023]
-    fig = px.bar(df_2023, x = 'Location', y = 'Medical doctors (per 10,000)',
-        title = "Medical Doctors per 10,000 people in the Population in 2023",
-        labels = {'Location' : 'Country'})
-    fig.write_image("doctors_per_10000_2023.png")
 
 def drop_sex(df):
     """removes all rows with data specific to one sex and the column labeling sex group of data
@@ -106,18 +75,11 @@ def main():
     print(f"Current Directory: {os.getcwd()}")# Check your current working directory
 
     # Check if files is found
-    #file_path = "/home/nmina/Global_Healthcare/data/"
-    #file_path = '/home/gdiaz21/Global_Healthcare/data/'
+    file_path = "../data/"
     if os.path.exists(file_path):
         print(f"File found: {file_path}")
     else:
         print(f"File NOT found: {file_path}")
-
-    
-    #if os.path.exists(file_path):
-        #print(f"File found: {file_path}")
-    #else:
-        #print(f"File NOT found: {file_path}")
 
     # makes medical data dataframe (with all provider indicators)
     med_docs = import_data(file_path + r'medical-doctors.csv')
@@ -126,19 +88,7 @@ def main():
     dentists = import_data(file_path + r'dentistry.csv')
 
     new_data_who = make_medical_data_df(med_docs, nurse_midwifes, pharms, dentists)
-    new_data_who.to_csv('/home/gdiaz21/Global_Healthcare/data/new_data_who.csv')
-    print(new_data_who.info())
-
-    # read in WHO dataset
-    # THE FUNCTIONALITY OF THIS CODE DEPENDS ON CURRENT WORKING DIRECTORY
-        # ex: my current working directory when running this is /home/gdiaz21/Global_Healthcare/
-    data_who = import_data(file_path + "WHO data.csv") # this path will not work for everyone
-    data_who = data_who.drop(['ParentLocationCode', 'SpatialDimValueCode',
-        'IndicatorCode', 'Period type', 'Location type', 'ValueType',
-        'FactComments', 'FactValueNumeric', 'Language', 'IsLatestYear',
-        'DateModified'], axis=1)
-
-    #print(data_WHO.info())
+    new_data_who.to_csv('final_data/final_who.csv')
 
     # read in Institute for Health Metrics and Evaluation
     data_ihme_1 = import_data(file_path + "IHME-1.csv")
@@ -146,21 +96,16 @@ def main():
     data_ihme_combined = pd.concat([data_ihme_1, data_ihme_2], axis=0, ignore_index=True)
     data_ihme_combined = data_ihme_combined.drop(['age', 'metric', 'upper', 'lower'], axis=1)
 
-    #print(data_IHME_combined.info())
-
     df_ihme = pivot_ihme(data_ihme_combined)
-    df_who = pivot_who(data_who)
     df_ihme = drop_sex(df_ihme)
     df_ihme = ag_over_cause(df_ihme)
-    both_sources = pd.merge(df_ihme, df_who, how="inner",
+    both_sources = pd.merge(df_ihme, new_data_who, how="inner",
         left_on=['location','year'],right_on=['Location','Period'])
     both_sources.info()
-    #both_sources = both_sources.drop('Location',axis='columns')
-    #both_sources = both_sources.drop('Period',axis='columns')
+    both_sources = both_sources.drop('Location',axis='columns')
+    both_sources = both_sources.drop('Period',axis='columns')
 
-    #graph_docs_by_country(df_WHO)
-
-    both_sources.to_csv('inner_merged_data.csv',index=False)
+    both_sources.to_csv('final_data/inner_merged_data.csv',index=False)
 
 
 if __name__ == '__main__':

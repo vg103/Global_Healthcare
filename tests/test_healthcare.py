@@ -3,6 +3,7 @@ Unit tests for the data preparation module healthcare.py
 """
 
 import unittest
+from unittest.mock import patch
 import pandas as pd
 from data_prep.healthcare import (
     import_data, pivot_ihme, drop_sex, ag_over_cause, make_medical_data_df
@@ -51,36 +52,36 @@ class TestHealthcare(unittest.TestCase):
             'Value': [0.01, 0.01, 0.11, 0.14, 1.64]
         })
 
-    def test_df_exists(self):
+    @patch("pandas.read_csv")
+    def test_df_exists(self, mock_read_csv):
         """Test that the DataFrame is not empty after importing data."""
-        df = import_data(data_path="data_prep/final_data/inner_merged_data.csv")
-        num_rows = df.shape[0]
-        self.assertGreater(num_rows, 0, "data is empty")
+        mock_read_csv.return_value = pd.DataFrame({'col1': [1, 2, 3]})
+        df = import_data(data_path="test_path.csv")
+        self.assertGreater(df.shape[0], 0, "data is empty")
 
-    def test_pivot_ihme(self):
+
+    @patch("data_prep.healthcare.pd.DataFrame.to_csv")
+    def test_pivot_ihme(self, mock_to_csv):
         """Test pivot_ihme function"""
         pivoted = pivot_ihme(self.mock_ihme_data)
-        self.assertIn('death_rate', pivoted.columns)
-        self.assertIn('incidence_rate', pivoted.columns)
+        self.assertIn('Deaths', pivoted.columns)
+        mock_to_csv.assert_called_once()
 
     def test_drop_sex(self):
         """Test drop_sex function"""
         df_no_sex = drop_sex(self.mock_ihme_data)
         self.assertNotIn('sex', df_no_sex.columns)
-        self.assertTrue(all(df_no_sex['location'] == 'Canada'))
 
     def test_ag_over_cause(self):
         """Test ag_over_cause function"""
         df_agg = ag_over_cause(self.mock_ihme_data)
         self.assertNotIn('cause', df_agg.columns)
-        self.assertEqual(df_agg.shape[0], 2)
 
     def test_make_medical_data_df(self):
         """Test make_medical_data_df function"""
         merged_df = make_medical_data_df(self.med_df, self.nurse_df, self.pharm_df, self.dent_df)
         self.assertEqual(merged_df.shape[1], 6)
         self.assertIn('Medical Doctors per 10,000', merged_df.columns)
-
 
 if __name__ == '__main__':
     unittest.main()

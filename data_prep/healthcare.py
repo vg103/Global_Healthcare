@@ -70,16 +70,8 @@ def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
 
     return merged_df
 
-def main():
-    """Main function to run the code"""
-    print(f"Current Directory: {os.getcwd()}")# Check your current working directory
-
-    # Check if files is found
-    file_path = "../data/"
-    if os.path.exists(file_path):
-        print(f"File found: {file_path}")
-    else:
-        print(f"File NOT found: {file_path}")
+def process_healthcare_data(data_path, output_dir="final_data"):
+    """Processes healthcare data from IHME and WHO and saves merged results."""
 
     # makes medical data dataframe (with all provider indicators)
     med_docs = import_data(file_path + r'medical-doctors.csv')
@@ -106,6 +98,19 @@ def main():
     both_sources = both_sources.drop('Period',axis='columns')
 
     both_sources.to_csv('final_data/inner_merged_data.csv',index=False)
+
+
+def main():
+    """Main function to run the code"""
+    print(f"Current Directory: {os.getcwd()}")# Check your current working directory
+
+    # Check if files is found
+    file_path = "../data/"
+    if os.path.exists(file_path):
+        print(f"File found: {file_path}")
+        process_healthcare_data(file_path)
+    else:
+        print(f"File NOT found: {file_path}")
 
 
 if __name__ == '__main__':

@@ -6,7 +6,8 @@ import unittest
 from unittest.mock import patch
 import pandas as pd
 from data_prep.healthcare import (
-    import_data, pivot_ihme, drop_sex, ag_over_cause, make_medical_data_df
+    import_data, pivot_ihme, drop_sex, ag_over_cause, make_medical_data_df,
+    process_healthcare_data
 )
 
 class TestHealthcare(unittest.TestCase):
@@ -82,6 +83,24 @@ class TestHealthcare(unittest.TestCase):
         merged_df = make_medical_data_df(self.med_df, self.nurse_df, self.pharm_df, self.dent_df)
         self.assertEqual(merged_df.shape[1], 6)
         self.assertIn('Medical Doctors per 10,000', merged_df.columns)
+
+    @patch("data_prep.healthcare.import_data", return_value=pd.DataFrame({'Location': ['A'], 'Period': [2023], 'Value': [1.0]}))
+    @patch("data_prep.healthcare.make_medical_data_df", return_value=pd.DataFrame({'Location': ['A'], 'Period': [2023]}))
+    @patch("data_prep.healthcare.pivot_ihme", return_value=pd.DataFrame({'location': ['A'], 'year': [2023]}))
+    @patch("data_prep.healthcare.drop_sex")
+    @patch("data_prep.healthcare.ag_over_cause")
+    @patch("pandas.DataFrame.to_csv")
+    @patch("os.makedirs")
+    def test_process_healthcare_data(self, mock_makedirs, mock_to_csv, mock_ag, mock_drop, mock_pivot, mock_make_medical, mock_import):
+        """Tests process_healthcare_data to ensure correct execution."""
+        process_healthcare_data("test_data", "test_output")
+        mock_makedirs.assert_called_once_with("test_output", exist_ok=True)
+        self.assertEqual(mock_import.call_count, 6)
+        mock_make_medical.assert_called_once()
+        mock_pivot.assert_called_once()
+        mock_drop.assert_called_once()
+        mock_ag.assert_called_once()
+        self.assertEqual(mock_to_csv.call_count, 2)
 
 if __name__ == '__main__':
     unittest.main()

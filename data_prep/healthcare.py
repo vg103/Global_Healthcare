@@ -72,7 +72,7 @@ def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
 
 def process_healthcare_data(data_path, output_dir="final_data"):
     """Processes healthcare data from IHME and WHO and saves merged results."""
-
+    file_path = "../data/"
     # makes medical data dataframe (with all provider indicators)
     med_docs = import_data(file_path + r'medical-doctors.csv')
     nurse_midwifes = import_data(file_path + r'nursery-midwifery.csv')

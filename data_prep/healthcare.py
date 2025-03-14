@@ -72,6 +72,13 @@ def make_medical_data_df(med_df, nurse_df, pharm_df, dent_df):
 
 def process_healthcare_data(file_path):
     """function that processes all data using the functions in this file"""
+
+    # Check if files is found
+    if os.path.exists(file_path):
+        print(f"File found: {file_path}")
+    else:
+        print(f"File NOT found: {file_path}")
+
     # makes medical data dataframe (with all provider indicators)
     med_docs = import_data(file_path + r'medical-doctors.csv')
     nurse_midwifes = import_data(file_path + r'nursery-midwifery.csv')
@@ -102,13 +109,8 @@ def main():
     """Main function to run the code"""
     print(f"Current Directory: {os.getcwd()}")# Check your current working directory
 
-    # Check if files is found
     file_path = "../data/"
-    if os.path.exists(file_path):
-        process_healthcare_data(file_path)
-        print(f"File found: {file_path}")
-    else:
-        print(f"File NOT found: {file_path}")
+    process_healthcare_data(file_path)
 
 
 if __name__ == '__main__':

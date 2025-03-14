@@ -34,8 +34,6 @@ class TestHealthcare(unittest.TestCase):
 
         self.mock_pivot_ihme_data = pd.DataFrame({
             "location": ["Afghanistan", "Afghanistan"],
-            "sex": ["Both", "Both"],
-            "cause": ["Cardiovascular diseases", "Cardiovascular diseases"],
             "year": [1990, 1991],
             "Deaths": [456.5441080858281, 457.5592984646225],
             "Incidence": [1063.218329, 1075.179286]

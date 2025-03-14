@@ -8,7 +8,7 @@ The problem we are trying to solve is displaying visuals of the data in a dashbo
 ## **Python Libraries**
 
 
-**Plotly** - Plotly is a python library for creating interactive visuals. It can be used in Jupyter Notebooks and it integrates well with Dash for building interactive dashboards. Plotly is user friendly and builds plots with minimal code. 
+**Plotly** - Plotly is a python library for creating interactive visuals. It can be used in Jupyter Notebooks and it integrates well with Dash and Streamlit for building interactive dashboards. Plotly is user friendly and builds plots with minimal code. 
 
 Author: Plotly (Alex Johnson, Jack Parmer, Chris Parmer, Matthew Sundquist)
 

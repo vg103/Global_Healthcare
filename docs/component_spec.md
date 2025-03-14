@@ -4,10 +4,10 @@
 
 ### 1. Data Manager (Unified Dataset)
 **What it does:**  
-Provides a simplified interface to the unified dataset that merges data from multiple sources using the common "Country" field. It handles data cleaning, integration, and efficient querying.
+Provides a simplified interface to the unified dataset that merges data from multiple sources using the common "Country" and "Year" field. It handles data cleaning, integration, and efficient querying.
 
 **Inputs:**  
-- Raw data files (e.g., IHME data, Commonwealth Fund data, WHO Global Health Workforce data)  
+- Raw data files (e.g., IHME data, WHO Global Health Workforce data)  
 - Query parameters (e.g., selected countries, filtering criteria)
 
 **Outputs:**  
@@ -117,7 +117,43 @@ sequenceDiagram
     VM->>WA: Render updated visualizations
     WA-->>U: Display updated dashboard
 ```
-## Use Case 2: Exploring Global Healthcare Trends
+## Use Case 2: Comparing Quality of Life Across Countries
+
+**Scenario:**  
+A person looking to move countries want to see which countries have the highest rated healthcare outcomes.
+
+**Interaction Flow:**
+1. **User Action:** The user selects global trend filters via the Web App.
+2. **Filtering:** The Web App sends these criteria to the Country Filter Component.
+3. **Data Query:** The Country Filter Component queries the Data Manager using the global filter criteria.
+4. **Data Processing:** The Data Manager returns the filtered global dataset.
+5. **Visualization:** The Country Filter Component passes the filtered global data to the Visualization Manager, which updates the visualizations. Optionally, the Ranking Algorithm is invoked.
+6. **Display:** The updated dashboard displays the global trends across various countries.
+
+### Sequence Diagram for Use Case 2
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant WA as Web App
+    participant CF as Country Filter Component
+    participant DM as Data Manager (Unified Dataset)
+    participant VM as Visualization Manager
+    participant RA as Ranking Algorithm
+
+    U->>WA: Selects global trend filters (e.g., region, income)
+    WA->>CF: Send global filter criteria
+    CF->>DM: Query unified dataset with global criteria
+    DM-->>CF: Return filtered global data
+    CF->>VM: Pass filtered global data
+    alt Ranking Update Needed
+        VM->>RA: Request ranking recalculation (with filtered data)
+        RA-->>VM: Return updated ranking scores
+    end
+    VM->>WA: Update and render global trend visualizations
+    WA-->>U: Display updated dashboard with global trends
+```
+## Use Case 3: Exploring Global Healthcare Trends
 
 **Scenario:**  
 A journalist or global health analyst applies various filters (e.g., region, income level) via the Web App to explore and compare global healthcare trends.
@@ -130,7 +166,7 @@ A journalist or global health analyst applies various filters (e.g., region, inc
 5. **Visualization:** The Country Filter Component passes the filtered global data to the Visualization Manager, which updates the visualizations. Optionally, the Ranking Algorithm is invoked.
 6. **Display:** The updated dashboard displays the global trends across various countries.
 
-### Sequence Diagram for Use Case 2
+### Sequence Diagram for Use Case 3
 
 ```mermaid
 sequenceDiagram

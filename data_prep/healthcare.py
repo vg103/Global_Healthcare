@@ -4,7 +4,7 @@ Code to read in, clean, and merge data from the
 """
 import os
 import pandas as pd
-from data_prep.ranking import process_ranking_pipeline
+from ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -36,7 +36,7 @@ def drop_sex(df):
     #using inplace=TRUE turned df into type None - confirm with group
     df = df.drop(df[df.sex=="Male"].index, axis="index")
     df = df.drop(df[df.sex=="Female"].index, axis="index")
-    # df = df.drop('sex', axis="columns")
+    df = df.drop('sex', axis="columns")
     return df
 
 def ag_over_cause(df):
@@ -44,13 +44,13 @@ def ag_over_cause(df):
     Args: pandas DataFrame, should only be called on IHME
     Returns: pandas DataFrame with just one row per country per year"""
     df = df.groupby(['location','year'],as_index=False).sum()
-    # df = df.drop('cause',axis='columns')
+    df = df.drop('cause',axis='columns')
     return df
 
 def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
     ihme_to_who = {
         "Micronesia (Federated States of)": "Micronesia",
-        # "Côte d'Ivoire": "Cote d'Ivoire",
+        "Côte d'Ivoire": "Cote d'Ivoire",
         "American Samoa": "Samoa",
         "Taiwan (Province of China)": "Taiwan",
     }

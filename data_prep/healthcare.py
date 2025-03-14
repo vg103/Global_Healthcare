@@ -4,7 +4,7 @@ Code to read in, clean, and merge data from the
 """
 import os
 import pandas as pd
-from ranking import process_ranking_pipeline
+from data_prep.ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -50,8 +50,7 @@ def ag_over_cause(df):
 def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
     ihme_to_who = {
         "Micronesia (Federated States of)": "Micronesia",
-        "Côte d'Ivoire": "Cote d'Ivoire",
-        "Tokelau": "New Zealand",
+        # "Côte d'Ivoire": "Cote d'Ivoire",
         "American Samoa": "Samoa",
         "Taiwan (Province of China)": "Taiwan",
     }
@@ -64,7 +63,7 @@ def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
     }
 
     who_df[who_col] = who_df[who_col].replace(who_to_ihme)
-    ihme_df[ihme_col] = ihme_df[ihme_col].replace(who_to_ihme)
+    ihme_df[ihme_col] = ihme_df[ihme_col].replace(ihme_to_who)
 
     return who_df, ihme_df
 

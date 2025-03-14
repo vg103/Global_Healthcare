@@ -6,8 +6,8 @@ import unittest
 from unittest.mock import patch
 import pandas as pd
 from data_prep.healthcare import (
-    import_data, pivot_ihme, drop_sex, ag_over_cause, make_medical_data_df,
-    process_healthcare_data
+    import_data, pivot_ihme, drop_sex, ag_over_cause, reconcile_locations,
+    make_medical_data_df, process_healthcare_data
 )
 
 class TestHealthcare(unittest.TestCase):
@@ -42,27 +42,32 @@ class TestHealthcare(unittest.TestCase):
             })
 
         self.med_df = pd.DataFrame({
-            'Location': ['Central African Republic', 'Chad', 'Senegal', "Cote d'Ivoire", 'Nepal'],
-            'Period': [2023, 2023, 2023, 2023, 2023],
-            'Value': [0.74, 0.85, 1.09, 1.66, 10.11]
+            'ParentLocation': ['Africa', 'Africa'],
+            'Location': ['Central African Republic', 'Chad'],
+            'Period': [2023, 2023],
+            'Value': [0.74, 0.85]
         })
         self.nurse_df = pd.DataFrame({
-            'Location': ['Central African Republic', 'Chad', 'Senegal', "Cote d'Ivoire", 'Nepal'],
-            'Period': [2023, 2023, 2023, 2023, 2023],
-            'Value': [10.97, 1.67, 4.24, 7.93, 40.92]
+            'ParentLocation': ['Africa', 'Africa'],
+            'Location': ['Central African Republic', 'Chad'],
+            'Period': [2023, 2023],
+            'Value': [10.97, 1.67]
         })
         self.pharm_df = pd.DataFrame({
-            'Location': ['Central African Republic', 'Chad', 'Senegal', "Cote d'Ivoire", 'Nepal'],
-            'Period': [2023, 2023, 2023, 2023, 2023],
-            'Value': [0.03, 0.08, 0.2, 0.39, 2.25]
+            'ParentLocation': ['Africa', 'Africa'],
+            'Location': ['Central African Republic', 'Chad'],
+            'Period': [2023, 2023],
+            'Value': [0.03, 0.08]
         })
         self.dent_df = pd.DataFrame({
-            'Location': ['Central African Republic', 'Chad', 'Senegal', "Cote d'Ivoire", 'Nepal'],
-            'Period': [2023, 2023, 2023, 2023, 2023],
-            'Value': [0.01, 0.01, 0.11, 0.14, 1.64]
+            'ParentLocation': ['Africa', 'Africa'],
+            'Location': ['Central African Republic', 'Chad'],
+            'Period': [2023, 2023],
+            'Value': [0.01, 0.01]
         })
 
         self.full_med_df = pd.DataFrame({
+            "ParentLocation": ["Africa", "Africa"],
             "Location": ["Central African Republic", "Chad"],
             "Period": [2023, 2023],
             "Medical Doctors per 10,000": [0.74, 0.85],
@@ -78,28 +83,30 @@ class TestHealthcare(unittest.TestCase):
         df = import_data(data_path="test_path.csv")
         self.assertGreater(df.shape[0], 0, "data is empty")
 
-
     @patch("data_prep.healthcare.pd.DataFrame.to_csv")
     def test_pivot_ihme(self, mock_to_csv):
         """Test pivot_ihme function"""
         pivoted = pivot_ihme(self.mock_ihme_data)
         self.assertIn('Deaths', pivoted.columns)
-        mock_to_csv.assert_called_once()
+        self.assertNotIn('measure', pivoted.columns)
 
     def test_drop_sex(self):
         """Test drop_sex function"""
         df_no_sex = drop_sex(self.mock_ihme_data)
         self.assertNotIn('sex', df_no_sex.columns)
+        self.assertEqual(len(df_no_sex), 1)
 
     def test_ag_over_cause(self):
         """Test ag_over_cause function"""
         df_agg = ag_over_cause(self.mock_ihme_data)
         self.assertNotIn('cause', df_agg.columns)
+        self.assertIn('location', df_agg.columns)
+        self.assertIn('year', df_agg.columns)
 
     def test_make_medical_data_df(self):
         """Test make_medical_data_df function"""
         merged_df = make_medical_data_df(self.med_df, self.nurse_df, self.pharm_df, self.dent_df)
-        self.assertEqual(merged_df.shape[1], 6)
+        self.assertEqual(merged_df.shape[1], 7)
         self.assertIn('Medical Doctors per 10,000', merged_df.columns)
 
     @patch("data_prep.healthcare.import_data")

@@ -28,7 +28,6 @@ This dashboard addresses the need for a data backed platform to help various typ
 ### Data Sources
 to be merged over country, which is a field in all of the below datasets
 - [Institute for Health Metrics and Evaluation](https://vizhub.healthdata.org/gbd-results/)
-- build a sheet using data from this document [International Profiles of Health Care Systems](https://www.commonwealthfund.org/sites/default/files/2020-12/International_Profiles_of_Health_Care_Systems_Dec2020.pdf)
 - [WHO Global Health Workforce Data](https://www.who.int/data/gho/data/themes/topics/health-workforce)
 
 
@@ -41,7 +40,12 @@ to be merged over country, which is a field in all of the below datasets
     User: Decides to add in two more countries to compare metrics and trends
     System: Updates to include multiple countries
 
-**Use Case 2: Explore Global Healthcare Trends: The system enables the journalist to explore and extract global healthcare trends for storytelling**
+**Use Case 2: Explore top countries according to ranking algorithm**
+    User: Opens dashboard and navigates to top countries from algorithm output
+    System: Runs ranking algorithm and outputs visualization to show a list of all countries in ranked order
+    User: Scrolls through ranked country list
+
+**Use Case 3: Explore Global Healthcare Trends: The system enables the journalist to explore and extract global healthcare trends for storytelling**
 
     User: Opens the dashboard and selects the “Global Trends” section.
     System: Presents interactive graphs and charts that depict various healthcare indicators across multiple countries.

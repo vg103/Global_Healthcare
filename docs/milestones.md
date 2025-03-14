@@ -2,10 +2,9 @@
 
 ## 1. Data Cleaning and Setup
 - **Tasks:**
-  - Scrape data from insurance documents into an Excel file.
-  - Merge all three data sources into a unified dataset using the common "Country" field.
+  - Merge both data sources into a unified dataset using the common "Country" field.
 - **Success Criteria:**
-  - The unified dataset is correctly merged and is queryable by country.
+  - The unified dataset is correctly merged and is queryable by country or year.
   - Data is cleaned and standardized for further analysis.
 - **Related Component:** Data Manager
 

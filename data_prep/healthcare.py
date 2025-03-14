@@ -36,7 +36,7 @@ def drop_sex(df):
     #using inplace=TRUE turned df into type None - confirm with group
     df = df.drop(df[df.sex=="Male"].index, axis="index")
     df = df.drop(df[df.sex=="Female"].index, axis="index")
-    df = df.drop('sex', axis="columns")
+    # df = df.drop('sex', axis="columns")
     return df
 
 def ag_over_cause(df):
@@ -44,7 +44,7 @@ def ag_over_cause(df):
     Args: pandas DataFrame, should only be called on IHME
     Returns: pandas DataFrame with just one row per country per year"""
     df = df.groupby(['location','year'],as_index=False).sum()
-    df = df.drop('cause',axis='columns')
+    # df = df.drop('cause',axis='columns')
     return df
 
 def reconcile_locations(who_df, who_col, ihme_df, ihme_col):

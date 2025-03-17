@@ -15,7 +15,7 @@ import numpy as np
 @st.cache_data
 def load_data():
     # Load IHME data
-    df_IHME = pd.read_csv("data_prep/final_data/final_IHME.csv")
+    df_IHME = pd.read_csv("../data_prep/final_data/final_IHME.csv")
     df_IHME.columns = df_IHME.columns.str.strip().str.replace('"', '')
     ihme_mapping = {
         "location": "location",
@@ -34,7 +34,7 @@ def load_data():
             f"final_IHME.csv is missing columns: {expected_IHME - set(df_IHME.columns)}")
 
     # Load final WHO data
-    df_WHO = pd.read_csv("data_prep/final_data/final_who.csv")
+    df_WHO = pd.read_csv("../data_prep/final_data/final_who.csv")
     df_WHO.columns = df_WHO.columns.str.strip().str.replace('"', '')
     df_WHO = df_WHO.loc[:, ~df_WHO.columns.str.contains("^Unnamed")]
     who_mapping = {
@@ -52,7 +52,7 @@ def load_data():
             f"final_who.csv is missing columns: {expected_WHO - set(df_WHO.columns)}")
 
     # Load inner merged data
-    df_metrics = pd.read_csv("data_prep/final_data/inner_merged_data.csv")
+    df_metrics = pd.read_csv("../data_prep/final_data/inner_merged_data.csv")
     df_metrics.columns = df_metrics.columns.str.strip().str.replace('"', '')
     df_metrics = df_metrics.loc[:, ~
                                 df_metrics.columns.str.contains("^Unnamed")]
@@ -158,7 +158,6 @@ def plot_ihme_data(df, metric="deaths", selected_year=None, selected_location=No
                       yaxis_title=metric.capitalize(), template="plotly_white")
     return fig
 
-
 def plot_who_data(df, selected_year=None, selected_location=None):
     if selected_year is None:
         selected_year = df["year"].max()
@@ -193,7 +192,6 @@ def plot_who_data(df, selected_year=None, selected_location=None):
     )
     return fig
 
-
 def plot_metrics_by_country(df, primary_metric="medical_doctors_per_10000", secondary_metric="nurses_midwifes_per_10000", selected_year=None, selected_location=None):
     if selected_year is None:
         selected_year = df["year"].max()
@@ -226,7 +224,6 @@ def plot_metrics_by_country(df, primary_metric="medical_doctors_per_10000", seco
     )
     return fig
 
-
 def plot_metrics_over_time(df, primary_metric="medical_doctors_per_10000", secondary_metric="nurses_midwifes_per_10000", selected_location=None):
     if selected_location:
         df = df[df["location"].isin(selected_location)]
@@ -255,7 +252,6 @@ def plot_metrics_over_time(df, primary_metric="medical_doctors_per_10000", secon
         template="plotly_white"
     )
     return fig
-
 
 # -------------------------
 # Main Dashboard Layout
@@ -288,7 +284,7 @@ with tabs[0]:
         st.subheader("Top 5 Healthcare Systems by Year")
         # Dropdown to select the year
         years = df_metrics["year"].unique()
-        selected_year = st.selectbox("Select Year", years)
+        selected_year = st.selectbox("Select Year", years, key="home_year")
     
     with col2:
         # Drop down and ranking list
@@ -301,7 +297,7 @@ with tabs[0]:
     # Section 2
     st.subheader("Composite Score or Ranking Over Time by Country")
     metric_choice = st.selectbox("Select Metric", options=[
-                                     "comp_score", "rank"])
+                                     "comp_score", "rank"], key="home_metric")
     available_locations = sorted(df_metrics["location"].dropna().unique())
     location_choice = st.multiselect(
         "Select Location(s)", options=available_locations, default="United States of America")
@@ -322,16 +318,16 @@ with tabs[1]:
     year_choice = None
     with col1:
         measure_choice = st.selectbox("Select Measure", options=[
-                                     "deaths", "incidence"])
+                                     "deaths", "incidence"], key="ihme_measure")
     with col2:
         years = sorted(df_IHME["year"].unique())
         year_choice = st.selectbox(
-            "Select Year", options=years, index=len(years)-1)
+            "Select Year", options=years, index=len(years)-1, key="ihme_year")
     with col3:
         locations = sorted(df_IHME[df_IHME["year"]==(year_choice)]["location"].unique())
         default = ["United States of America", "India", "China"]
         location_choice = st.multiselect(
-            "Select Location(s)", options=locations, default=default)
+            "Select Location(s)", options=locations, default=default, key="ihme_loc")
     with col4:
         causes = sorted(df_IHME["cause"].unique())
         default = ["Cardiovascular diseases", "Digestive diseases"]
@@ -352,7 +348,7 @@ with tabs[2]:
     with col1:
         years_who = sorted(df_WHO["year"].unique())
         year_choice = st.selectbox(
-            "Select Year", options=years_who, index=len(years_who)-1)
+            "Select Year", options=years_who, index=len(years_who)-1, key="who_year")
     with col2:
         countries_who = sorted(df_WHO[df_WHO["year"]==(year_choice)]["location"].unique())
         default = countries_who[:3]
@@ -374,14 +370,14 @@ with tabs[3]:
     year_choice = None
     with col1:
         primary_metric_choice = st.selectbox(
-            "Primary Metric", options=workforce_metrics, index=0)
+            "Primary Metric", options=workforce_metrics, index=0, key="country_met_one")
     with col2:
         secondary_metric_choice = st.selectbox(
-            "Secondary Metric", options=workforce_metrics, index=1)
+            "Secondary Metric", options=workforce_metrics, index=1, key="country_met_two")
     with col3:
         years_metrics = sorted(df_metrics["year"].unique())
         year_choice = st.selectbox(
-            "Select Year", options=years_metrics, index=len(years_metrics)-1)
+            "Select Year", options=years_metrics, index=len(years_metrics)-1, key="country_year")
     with col4:
         countries = sorted(df_metrics[df_metrics["year"]==(year_choice)]["location"].unique())
         end = min(10, len(countries)-1)
@@ -410,7 +406,7 @@ with tabs[4]:
     with col3:
         available_locations = sorted(df_metrics["location"].dropna().unique())
         location_time_choice = st.multiselect(
-            "Select Location(s)", options=available_locations, default=available_locations[:3])
+            "Select Location(s)", options=available_locations, default=available_locations[:3], key="over_time_loc")
     fig_time = plot_metrics_over_time(
         df_metrics,
         primary_metric=primary_metric_time,
@@ -423,7 +419,7 @@ with tabs[4]:
 with tabs[5]:
     st.header("Country Overview")
     countries = sorted(df_metrics["location"].dropna().unique())
-    country = st.selectbox("Select Country", options=countries)
+    country = st.selectbox("Select Country", options=countries, key="country_country")
     st.write(f"Overview for {country} coming soon...")
     #add graphs for country page here
     # print large: most recent algo ranking

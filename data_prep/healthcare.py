@@ -4,8 +4,7 @@ Code to read in, clean, and merge data from the
 """
 import os
 import pandas as pd
-# from data_prep.ranking import process_ranking_pipeline  #for unit test
-from ranking import process_ranking_pipeline
+from .ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -49,6 +48,7 @@ def ag_over_cause(df):
     return df
 
 def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
+    """renames countries in WHO and IHME to match before merging"""
     ihme_to_who = {
         "Micronesia (Federated States of)": "Micronesia",
         "Côte d'Ivoire": "Cote d'Ivoire",
@@ -62,6 +62,9 @@ def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
         "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
         "Türkiye": "Turkey",
     }
+    
+    who_df = who_df.copy()
+    ihme_df = ihme_df.copy()
 
     who_df[who_col] = who_df[who_col].replace(who_to_ihme)
     ihme_df[ihme_col] = ihme_df[ihme_col].replace(ihme_to_who)
@@ -95,36 +98,37 @@ def process_healthcare_data(file_path):
     """function that processes all data using the functions in this file"""
 
     # makes medical data dataframe (with all provider indicators)
-    med_docs = import_data(file_path + r'medical-doctors.csv')
-    nurse_midwifes = import_data(file_path + r'nursery-midwifery.csv')
-    pharms = import_data(file_path + r'pharmacists.csv')
-    dentists = import_data(file_path + r'dentistry.csv')
+    med_docs = import_data(os.path.join(file_path, 'medical-doctors.csv'))
+    nurse_midwifes = import_data(os.path.join(file_path, r'nursery-midwifery.csv'))
+    pharms = import_data(os.path.join(file_path, r'pharmacists.csv'))
+    dentists = import_data(os.path.join(file_path, r'dentistry.csv'))
 
     new_data_who = make_medical_data_df(med_docs, nurse_midwifes, pharms, dentists)
 
     # read in Institute for Health Metrics and Evaluation
-    data_ihme_1 = import_data(file_path + "IHME-1.csv")
-    data_ihme_2 = import_data(file_path + "IHME-2.csv")
+    data_ihme_1 = import_data(os.path.join(file_path, "IHME-1.csv"))
+    data_ihme_2 = import_data(os.path.join(file_path, "IHME-2.csv"))
     data_ihme_combined = pd.concat([data_ihme_1, data_ihme_2], axis=0, ignore_index=True)
     data_ihme_combined = data_ihme_combined.drop(['age', 'metric', 'upper', 'lower'], axis=1)
 
     df_ihme = pivot_ihme(data_ihme_combined)
     df_ihme = drop_sex(df_ihme)
     df_ihme = ag_over_cause(df_ihme)
-    df_ihme.to_csv('data_prep/final_data/final_IHME.csv', index=False)
 
     new_data_who, df_ihme = reconcile_locations(new_data_who, 'Location', df_ihme, 'location')
 
-    new_data_who.to_csv('data_prep/final_data/final_who.csv')
-    df_ihme.to_csv('data_prep/final_data/final_IHME.csv', index=False)
+    final_data_path = os.path.join("data_prep", "final_data")
+    os.makedirs(final_data_path, exist_ok=True)
+    new_data_who.to_csv(os.path.join(final_data_path, 'final_who.csv'), index=False)
+    df_ihme.to_csv(os.path.join(final_data_path, 'final_IHME.csv'), index=False)
 
     both_sources = pd.merge(df_ihme, new_data_who, how="inner",
         left_on=['location','year'],right_on=['Location','Period'])
     both_sources.info()
     both_sources = both_sources.drop('Location',axis='columns')
     both_sources = both_sources.drop('Period',axis='columns')
-    
-    merged_data_path = 'data_prep/final_data/inner_merged_data.csv'
+
+    merged_data_path = os.path.join(final_data_path, 'inner_merged_data.csv')
     both_sources.to_csv(merged_data_path, index=False)
 
     # Integrate final ranking from ranking.py
@@ -138,13 +142,13 @@ def main():
     print(f"Current Directory: {os.getcwd()}")# Check your current working directory
 
     file_path = os.path.join(os.getcwd(), "data_prep", "data/")
+
     print(f"File Path: {file_path}")
     # Check if files is found
     if os.path.exists(file_path):
         process_healthcare_data(file_path)
     else:
         print(f"File NOT found: {file_path}")
-    
 
 
 if __name__ == '__main__':

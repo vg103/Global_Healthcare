@@ -12,3 +12,4 @@ dependencies:
   - plotly=5
   - bokeh=3
   - streamlit
+  - scikit-learn=1

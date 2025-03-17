@@ -1,6 +1,6 @@
 """
 This script contains a testing class for UI for the streamlit app in 
-streamlit_app.py
+hcare.py
 """
 
 import unittest
@@ -8,15 +8,15 @@ from streamlit.testing.v1 import AppTest
 from json import loads
 
 
-class StreamlitAppTest(unittest.TestCase):
+class HcareTest(unittest.TestCase):
     """
-    This class tests UI for streamlit_app.py
+    This class tests UI for hcare.py
     """
 
     def setUp(self):
         """
         The unittest framework automatically runs this `setUp` function before
-        each test. We initialize AppTest for the streamlit_app.py file.
+        each test. We initialize AppTest for the hcare.py file.
         """
 
         """
@@ -25,33 +25,34 @@ class StreamlitAppTest(unittest.TestCase):
         snake_case naming style
         """
         #pylint: disable=no-member
-        self.at = AppTest.from_file('streamlit_app.py').run()
+        self.at = AppTest.from_file('../hcare/hcare.py').run()
+        print("self.at is type: ", type(self.at))
 
     def test_title(self):
         """
         Tests the title of the dashboard
         """
-        self.assertEqual(self.at.title[0].value, "Health Data Dashboard")
+        self.assertEqual(self.at.title[0].value, "Global Healthcare")
 
     #Testing for Tab 1: IHME Data Graph
     def test_selectbox_metric_ihme(self):
         """
         Check the selectbox for the metric choice in IHME Data tab
         """
-        self.assertEqual(self.at.selectbox[0].options, ["deaths", "incidence"])
+        self.assertEqual(self.at.selectbox(key="ihme_measure").options, ["deaths", "incidence"])
 
     def test_selectbox_year_ihme(self):
         """
         Check if the years for IHME data are populated correctly
         """
-        years = sorted(self.at.selectbox[1].options)
+        years = sorted(self.at.selectbox(key="ihme_year").options)
         self.assertGreater(len(years), 0)
 
     def test_multiselect_location_ihme(self):
         """
         Check the multiselect for selecting locations in IHME Data tab
         """
-        locations = sorted(self.at.multiselect[0].options)
+        locations = sorted(self.at.multiselect(key="ihme_loc").options)
         self.assertGreater(len(locations), 0)
 
     def test_plot_ihme_data(self):
@@ -66,7 +67,8 @@ class StreamlitAppTest(unittest.TestCase):
         """
         Check if the years for WHO data are populated correctly
         """
-        years_who = sorted(self.at.selectbox[2].options)
+        print(type(self.at.selectbox))
+        years_who = sorted(self.at.selectbox(key="who_year").options)
         self.assertGreater(len(years_who), 0)
 
     def test_plot_who_data(self):
@@ -84,7 +86,7 @@ class StreamlitAppTest(unittest.TestCase):
         """
         metrics = ["medical_doctors_per_10000", "nurses_midwifes_per_10000",
                    "pharmacists_per_10000", "dentists_per_10000"]
-        self.assertEqual(self.at.selectbox[3].options, metrics)
+        self.assertEqual(self.at.selectbox(key="country_met_one").options, metrics)
 
     def test_selectbox_secondary_metric_country(self):
         """
@@ -93,13 +95,13 @@ class StreamlitAppTest(unittest.TestCase):
         """
         metrics = ["medical_doctors_per_10000", "nurses_midwifes_per_10000",
                    "pharmacists_per_10000", "dentists_per_10000"]
-        self.assertEqual(self.at.selectbox[4].options, metrics)
+        self.assertEqual(self.at.selectbox(key="country_met_two").options, metrics)
 
     def test_selectbox_year_metric_country(self):
         """
         Check if the years for Metric by Country tab are populated correctly
         """
-        years = sorted(self.at.selectbox[5].options)
+        years = sorted(self.at.selectbox(key="country_year").options)
         self.assertGreater(len(years), 0)
 
     def test_plot_country_data(self):
@@ -117,7 +119,7 @@ class StreamlitAppTest(unittest.TestCase):
         """
         metrics = ["medical_doctors_per_10000", "nurses_midwifes_per_10000",
                    "pharmacists_per_10000", "dentists_per_10000"]
-        self.assertEqual(self.at.selectbox[6].options, metrics)
+        self.assertEqual(self.at.selectbox(key="over_time_primary").options, metrics)
 
     def test_selectbox_secondary_metric_time(self):
         """
@@ -126,7 +128,7 @@ class StreamlitAppTest(unittest.TestCase):
         """
         metrics = ["medical_doctors_per_10000", "nurses_midwifes_per_10000",
                    "pharmacists_per_10000", "dentists_per_10000"]
-        self.assertEqual(self.at.selectbox[7].options, metrics)
+        self.assertEqual(self.at.selectbox(key="over_time_secondary").options, metrics)
 
     def test_plot_time_data(self):
         """
@@ -139,7 +141,7 @@ class StreamlitAppTest(unittest.TestCase):
         """
         Check the multiselect for selecting locations in Metrics over Time tab
         """
-        locations = sorted(self.at.multiselect[1].options)
+        locations = sorted(self.at.multiselect(key="over_time_loc").options)
         self.assertGreater(len(locations), 0)
 
 if __name__ == '__main__':

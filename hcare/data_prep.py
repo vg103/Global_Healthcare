@@ -28,7 +28,6 @@ def pivot_ihme(df):
     pivoted_df = pivoted_df.reset_index()
     # Rename the columns for clarity
     pivoted_df = pivoted_df.rename(columns={'death': 'death_rate', 'incidence': 'incidence_rate'})
-    # pivoted_df.to_csv('final_data/final_IHME.csv',index=False)
     return pivoted_df
 
 def drop_sex(df):
@@ -114,28 +113,18 @@ def process_healthcare_data(file_path):
     data_ihme_combined = data_ihme_combined.drop(['age', 'metric', 'upper', 'lower'], axis=1)
 
     df_ihme = pivot_ihme(data_ihme_combined)
-    df_ihme = drop_sex(df_ihme)
-    df_ihme = ag_over_cause(df_ihme)
-
     new_data_who, df_ihme = reconcile_locations(new_data_who, 'Location', df_ihme, 'location')
 
-    # final_data_path = os.path.join("data_prep", "final_data")
-    # os.makedirs(final_data_path, exist_ok=True)
-    # new_data_who.to_csv(os.path.join(final_data_path, 'final_who.csv'), index=False)
-    # df_ihme.to_csv(os.path.join(final_data_path, 'final_IHME.csv'), index=False)
+    df_ihme_merge = drop_sex(df_ihme)
+    df_ihme_merge = ag_over_cause(df_ihme_merge)
 
-    both_sources = pd.merge(df_ihme, new_data_who, how="inner",
-        left_on=['location','year'],right_on=['Location','Period'])
-    both_sources.info()
+    both_sources = pd.merge(df_ihme_merge, new_data_who, how="inner",
+                            left_on=['location','year'],right_on=['Location','Period'])
     both_sources = both_sources.drop('Location',axis='columns')
     both_sources = both_sources.drop('Period',axis='columns')
 
-    # merged_data_path = os.path.join(final_data_path, 'inner_merged_data.csv')
-    # both_sources.to_csv(merged_data_path, index=False)
-
     # Integrate final ranking from ranking.py
     both_sources_rank = process_ranking_pipeline(both_sources)
-    # both_sources.to_csv(merged_data_path, index=False)
 
     return new_data_who, df_ihme, both_sources_rank
 

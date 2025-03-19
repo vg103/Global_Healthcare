@@ -3,14 +3,9 @@ Script to make the interactive dashboard for this project.
 """
 import os
 import streamlit as st
-import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-import numpy as np
-# import data_prep.healthcare
-from hcare.data_prep import process_healthcare_data
-
-
+from data_prep import process_healthcare_data
 
 # -------------------------
 # Data Loading Function with Standardized Column Names
@@ -20,12 +15,9 @@ from hcare.data_prep import process_healthcare_data
 @st.cache_data
 def load_data():
 
-    df_WHO, df_IHME, df_metrics = process_healthcare_data("data_prep/data/")
+    file_path = os.path.join(os.getcwd(), "data/")
+    df_WHO, df_IHME, df_metrics = process_healthcare_data(file_path)
 
-    # Load IHME data
-    # df_IHME = pd.read_csv("../data_prep/final_data/final_IHME.csv")
-    # final_data_path = os.path.join("../data_prep", "final_data")
-    # df_IHME = pd.read_csv(os.path.join(final_data_path, 'final_IHME.csv'))
     df_IHME.columns = df_IHME.columns.str.strip().str.replace('"', '')
     ihme_mapping = {
         "location": "location",
@@ -75,10 +67,10 @@ def load_data():
     # Now, rename the workforce columns (assuming they match the WHO file):
     metrics_mapping = {
         "Location": "location",
-        "Medical Doctors per 10,000": "medical_doctors_per_10000",
-        "Nurses and Midwifes per 10,000": "nurses_midwifes_per_10000",
-        "Pharmacists per 10,000": "pharmacists_per_10000",
-        "Dentists per 10,000": "dentists_per_10000"
+        "medical doctors per 10,000": "medical_doctors_per_10000",
+        "nurses and midwifes per 10,000": "nurses_midwifes_per_10000",
+        "pharmacists per 10,000": "pharmacists_per_10000",
+        "dentists per 10,000": "dentists_per_10000"
     }
     df_metrics = df_metrics.rename(columns=metrics_mapping)
     # Ensure the time column is named "year"
@@ -97,7 +89,7 @@ def load_data():
 # Plotting Functions (using standardized column names)
 # -------------------------
 
-def plot_compscore_over_time(df, primary_metric="comp_score", selected_location=None):
+def plot_compscore_over_time(df, primary_metric="composite_score", selected_location=None):
     if selected_location:
         df = df[df["location"].isin(selected_location)]
     fig = go.Figure()
@@ -118,7 +110,7 @@ def plot_compscore_over_time(df, primary_metric="comp_score", selected_location=
     )
     return fig
 
-def plot_death_vs_docs(df, primary_metric = "Deaths", secondary_metric = "medical_doctors_per_10000", selected_location = None):
+def plot_death_vs_docs(df, primary_metric = "deaths", secondary_metric = "medical_doctors_per_10000", selected_location = None):
     if selected_location:
         df = df[df["location"].isin(selected_location)]
     fig = px.scatter(
@@ -288,10 +280,6 @@ st.title("Global Healthcare")
 # Load data.
 df_IHME, df_WHO, df_metrics = load_data()
 
-#delete below line once healthcare.py returns merged csv WITH ranks and scores
-df_metrics['comp_score'] = np.random.randint(0, 100, size=len(df_metrics))
-df_metrics['rank'] = np.random.randint(0, 100, size=len(df_metrics))
-
 # (Optional) Debug: Uncomment these lines to inspect standardized column names.
 # st.write("IHME Data Columns:", df_IHME.columns.tolist())
 # st.write("WHO Data Columns:", df_WHO.columns.tolist())
@@ -323,7 +311,7 @@ with tabs[0]:
     # Section 2
     st.subheader("Composite Score or Ranking Over Time by Country")
     metric_choice = st.selectbox("Select Metric", options=[
-                                     "comp_score", "rank"], key="home_metric")
+                                     "composite_score", "rank"], key="home_metric")
     available_locations = sorted(df_metrics["location"].dropna().unique())
     location_choice = st.multiselect(
         "Select Location(s)", options=available_locations, default="United States of America")

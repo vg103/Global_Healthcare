@@ -6,7 +6,7 @@ import os
 
 import pandas as pd
 
-from ranking import process_ranking_pipeline
+from hcare.ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data

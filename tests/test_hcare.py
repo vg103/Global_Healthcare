@@ -34,7 +34,53 @@ class HcareTest(unittest.TestCase):
         """
         self.assertEqual(self.at.title[0].value, "Global Healthcare")
 
-    #Testing for Tab 1: IHME Data Graph
+    #Testing for Tab 1: Global Healthcare Systems - Ranking and Scores
+    def test_selectbox_ranking_year_home(self):
+        """
+        Check if the years for ranking list in the home tab are populated
+        correctly
+        """
+        years = sorted(self.at.selectbox(key="home_year").options)
+        self.assertGreater(len(years), 0)
+
+    def test_selectbox_metric_home(self):
+        """
+        Check if the metric selectbox for compscore over time graph is working
+        """
+        metrics = ["comp_score", "rank"]
+        self.assertEqual(self.at.selectbox(key="home_metric").options, metrics)
+
+    def test_multiselect_location_ihme(self):
+        """
+        Check the multiselect for selecting locations in compscore over time
+        graph on the home tab
+        """
+        locations = sorted(self.at.multiselect(key="home_loc").options)
+        self.assertGreater(len(locations), 0)
+
+    def test_plot_compscores_home(self):
+        """
+        Check if the compscores plot is generated correctly in home tab
+        """
+        chart = self.at.get('plotly_chart')[0]
+        self.assertIsNotNone(chart)
+
+    def test_multiselect_location_ihme(self):
+        """
+        Check the multiselect for selecting locations in death vs doc graph on
+        the home tab
+        """
+        locations = sorted(self.at.multiselect(key="country1").options)
+        self.assertGreater(len(locations), 0)
+
+    def test_plot_compscores_home(self):
+        """
+        Check if the death vs doc plot is generated correctly in home tab
+        """
+        chart = self.at.get('plotly_chart')[1]
+        self.assertIsNotNone(chart)
+
+    #Testing for Tab 2: IHME Data Graph
     def test_selectbox_metric_ihme(self):
         """
         Check the selectbox for the metric choice in IHME Data tab
@@ -55,14 +101,28 @@ class HcareTest(unittest.TestCase):
         locations = sorted(self.at.multiselect(key="ihme_loc").options)
         self.assertGreater(len(locations), 0)
 
+    def test_multiselect_cause_ihme(self):
+        """
+        Check the multiselect for selecting cause in IHME Data tab
+        """
+        causes = sorted(self.at.multiselect(key="ihm_cause").options)
+        self.assertGreater(len(causes), 0)
+
+    def test_multiselect_sex_ihme(self):
+        """
+        Check the multiselect for selecting sex in IHME Data tab
+        """
+        sexes = sorted(self.at.multiselect(key="ihm_sex").options)
+        self.assertGreater(len(sexes), 0)
+
     def test_plot_ihme_data(self):
         """
         Check if the plot is generated correctly in IHME Data tab
         """
-        chart = self.at.get('plotly_chart')[0]
+        chart = self.at.get('plotly_chart')[2]
         self.assertIsNotNone(chart)
 
-    #Testing for Tab 2: WHO Data Graph
+    #Testing for Tab 3: WHO Data Graph
     def test_selectbox_year_who(self):
         """
         Check if the years for WHO data are populated correctly
@@ -71,14 +131,21 @@ class HcareTest(unittest.TestCase):
         years_who = sorted(self.at.selectbox(key="who_year").options)
         self.assertGreater(len(years_who), 0)
 
+    def test_multiselect_location_who(self):
+        """
+        Check the multiselect for selecting locations in WHO Data tab
+        """
+        locations = sorted(self.at.multiselect(key="who_loc").options)
+        self.assertGreater(len(locations), 0)
+
     def test_plot_who_data(self):
         """
         Check if the plot is generated correctly in WHO Data tab"
         """
-        chart = self.at.get('plotly_chart')[1]
+        chart = self.at.get('plotly_chart')[3]
         self.assertIsNotNone(chart)
 
-    #Testing for Tab 3: Metrics By Country Graph
+    #Testing for Tab 4: Metrics By Country Graph
     def test_selectbox_primary_metric_country(self):
         """
         Check if the primary metric selectbox for Metrics by Country tab is 
@@ -104,14 +171,21 @@ class HcareTest(unittest.TestCase):
         years = sorted(self.at.selectbox(key="country_year").options)
         self.assertGreater(len(years), 0)
 
+    def test_multiselect_location_metric_country(self):
+        """
+        Check the multiselect for selecting locations in metrics by country tab
+        """
+        locations = sorted(self.at.multiselect(key="country_loc").options)
+        self.assertGreater(len(locations), 0)
+
     def test_plot_country_data(self):
         """
         Check if the plot for Metrics by Country tab is generated correctly
         """
-        chart = self.at.get('plotly_chart')[2]
+        chart = self.at.get('plotly_chart')[4]
         self.assertIsNotNone(chart)
 
-    #Testing for Tab 4: Metrics Over Time Graph
+    #Testing for Tab 5: Metrics Over Time Graph
     def test_selectbox_primary_metric_time(self):
         """
         Check if the primary metric selectbox for Metrics Over Time tab is
@@ -134,7 +208,7 @@ class HcareTest(unittest.TestCase):
         """
         Check if the plot for Metrics Over Time tab is generated correctly"
         """
-        chart = self.at.get('plotly_chart')[3]
+        chart = self.at.get('plotly_chart')[5]
         self.assertIsNotNone(chart)
 
     def test_multiselect_location_metric_time(self):
@@ -143,6 +217,30 @@ class HcareTest(unittest.TestCase):
         """
         locations = sorted(self.at.multiselect(key="over_time_loc").options)
         self.assertGreater(len(locations), 0)
+
+    #Testing for Tab 6: Country Overview
+    def test_selectbox_year_country_overview(self):
+        """
+        Check if the years for country overview tab are populated correctly
+        """
+        print(type(self.at.selectbox))
+        countries = sorted(self.at.selectbox(key="country_country").options)
+        self.assertGreater(len(countries), 0)
+
+    def test_selectbox_years_country_overview(self):
+        """
+        Check if the years for country overview tab are populated correctly
+        """
+        print(type(self.at.selectbox))
+        years = sorted(self.at.selectbox(key="spider_year").options)
+        self.assertGreater(len(years), 0)
+
+    def test_plot_who_data(self):
+        """
+        Check if the plot is generated correctly in country overview tab"
+        """
+        chart = self.at.get('plotly_chart')[6]
+        self.assertIsNotNone(chart)
 
 if __name__ == '__main__':
     unittest.main()

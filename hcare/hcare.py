@@ -255,6 +255,22 @@ def plot_metrics_over_time(df, primary_metric="medical_doctors_per_10000", secon
     )
     return fig
 
+def country_spider(df, country, year):
+    # Create a spider plot for the country
+    # Get the row for the country
+    country_row = df[(df['location'] == country) & (df['year'] == year)]
+    # Get the metrics
+    thetas = ['medical_doctors_per_10000', 'nurses_midwifes_per_10000',
+     'pharmacists_per_10000', 'dentists_per_10000']
+    rads = country_row[thetas].values.flatten()
+    fig_spider = px.line_polar(r=rads, theta=thetas, line_close=True)
+    fig_spider.update_layout(title=f"{country} Workforce Metrics in {year}")
+    fig_spider.update_traces(fill='toself')
+    # below line not working for some reason
+    fig_spider.update_layout(legend=dict(font=dict(color='black')))
+    return fig_spider
+
+
 # -------------------------
 # Main Dashboard Layout
 # -------------------------
@@ -281,7 +297,7 @@ with tabs[0]:
     with col1:
         st.subheader("Top 5 Healthcare Systems by Year")
         # Dropdown to select the year
-        years = df_metrics["year"].unique()
+        years = sorted(df_metrics["year"].unique())
         selected_year = st.selectbox("Select Year", years, key="home_year")
     
     with col2:
@@ -418,8 +434,15 @@ with tabs[5]:
     st.header("Country Overview")
     countries = sorted(df_metrics["location"].dropna().unique())
     country = st.selectbox("Select Country", options=countries, key="country_country")
-    st.write(f"Overview for {country} coming soon...")
+    
+    #col1 = st.columns(1)
+    #with col1:
+    years = sorted(df_WHO[df_WHO["location"]==country]["year"].unique())
+    year_choice = st.selectbox("Select Year", options=years, key="spider_year")
+        
+    fig_country = country_spider(df_WHO, country, year_choice)
+    st.plotly_chart(fig_country, use_container_width=False)
+    st.write(f"More in overview for {country} coming soon...")
     #add graphs for country page here
     # print large: most recent algo ranking
-    # spider plot of workforce measures
     # line plot of score over time, can hover to see exact score for any year

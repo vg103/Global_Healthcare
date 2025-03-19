@@ -6,7 +6,7 @@ import os
 
 import pandas as pd
 
-from .ranking import process_ranking_pipeline
+from ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -126,18 +126,14 @@ def process_healthcare_data(file_path):
     # Integrate final ranking from ranking.py
     both_sources_rank = process_ranking_pipeline(both_sources)
 
-    print(both_sources_rank.columns)
-
     return new_data_who, df_ihme, both_sources_rank
 
 def main():
-    """Main function to run the code"""
-    print(f"Current Directory: {os.getcwd()}")# Check your current working directory
-
+    """Main function to run the data maninuplation pipeline"""
+    print(f"Current Directory: {os.getcwd()}")
+    # ^Check your current working directory
     file_path = os.path.join(os.getcwd(), "data/")
 
-    print(f"File Path: {file_path}")
-    # Check if files is found
     if os.path.exists(file_path):
         process_healthcare_data(file_path)
     else:

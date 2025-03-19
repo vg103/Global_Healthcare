@@ -2,19 +2,16 @@
 Script to make the interactive dashboard for this project.
 """
 import os
+
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
+
 from data_prep import process_healthcare_data
-
-# -------------------------
-# Data Loading Function with Standardized Column Names
-# -------------------------
-
 
 @st.cache_data
 def load_data():
-
+    #file_path = "../data/"
     file_path = os.path.join(os.getcwd(), "data/")
     df_WHO, df_IHME, df_metrics = process_healthcare_data(file_path)
 
@@ -84,10 +81,6 @@ def load_data():
             f"inner_merged_data.csv is missing columns: {expected_metrics - set(df_metrics.columns)}")
 
     return df_IHME, df_WHO, df_metrics
-
-# -------------------------
-# Plotting Functions (using standardized column names)
-# -------------------------
 
 def plot_compscore_over_time(df, primary_metric="composite_score", selected_location=None):
     if selected_location:
@@ -160,15 +153,17 @@ def plot_ihme_data(df, metric="deaths", selected_year=None, selected_location=No
                       yaxis_title=metric.capitalize(), template="plotly_white")
     return fig
 
-def plot_who_data(df, selected_year=None, selected_location=None):
+def plot_who_data(df, selected_year=None, selected_location=None, selected_regions=None):
     if selected_year is None:
         selected_year = df["year"].max()
     df_year = df[df["year"] == selected_year]
+    if selected_regions and len(selected_regions)>0:
+        df_year = df_year[df_year["Region"].isin(selected_regions)]
     if selected_location and len(selected_location)>0:
         df_year = df_year[df_year["location"].isin(selected_location)]
 
     if df_year.empty:
-        print("No data available for the selected year and location, try another combination.")
+        print("No data available for the selected year, region(s), and countries combination, try another combination.")
 
     categories = [
         ("medical_doctors_per_10000", "Medical Doctors per 10000"),
@@ -271,9 +266,7 @@ def country_spider(df, country, year):
     return fig_spider
 
 
-# -------------------------
-# Main Dashboard Layout
-# -------------------------
+# dahsboard layout
 st.set_page_config(page_title="Global Healthcare", layout="wide")
 st.title("Global Healthcare")
 
@@ -291,7 +284,9 @@ tabs = st.tabs(
 
 # --- Home Page ---
 with tabs[0]:
-    st.header("Global Healthcare Systems - Ranking and Scores")
+    st.header("Ranking and Scores")
+    st.write("Welcome! This site provides an interactive overview of healthcare workforce and"
+        + " outcome metrics for various countries. On each tab, you can filter to see the desired data. Enjoy!")
     # Section 1
     col1, col2 = st.columns([1,1])
     with col1:
@@ -305,7 +300,7 @@ with tabs[0]:
         top_countries = df_metrics[df_metrics["year"] == selected_year].nsmallest(5, "rank")
         st.subheader(f"Top 5 Countries in {selected_year}:")
         for i, row in top_countries.iterrows():
-            st.write(f"**{row['rank']}. {row['location']}**")
+            st.write(f"**{row['rank']} {row['location']}**")
         st.markdown("---")
         
     # Section 2
@@ -324,6 +319,9 @@ with tabs[0]:
         "Select Location(s)", options=country_list, default="United States of America", key="country1")
     fig_death_vs_docs = plot_death_vs_docs(df_metrics, selected_location = country_selection)
     st.plotly_chart(fig_death_vs_docs, use_container_width=True)
+    # Section 4
+    st.write("DISCLAIMER: the fields used to generate these rankings are limited, therefore our "
+        + "rankings are not to be taken as definitive.")
 
 # -------- IHME Data Tab --------
 with tabs[1]:
@@ -357,18 +355,22 @@ with tabs[1]:
 # -------- WHO Data Tab --------
 with tabs[2]:
     st.header("Medical Workforce by Country")
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     year_choice = None
+    region_choice = None
     with col1:
         years_who = sorted(df_WHO["year"].unique())
         year_choice = st.selectbox(
             "Select Year", options=years_who, index=len(years_who)-1, key="who_year")
     with col2:
-        countries_who = sorted(df_WHO[df_WHO["year"]==(year_choice)]["location"].unique())
+        regions = sorted(df_WHO["Region"].unique())
+        region_choice = st.multiselect("Select Region", options=regions, key="who_region")
+    with col3:
+        countries_who = sorted(df_WHO[(df_WHO["year"]==(year_choice))&(df_WHO["Region"].isin(region_choice))]["location"].unique())
         default = countries_who[:3]
         country_choice = st.multiselect(
             "Select Location(s)", options=countries_who, default=default)
-    fig_who = plot_who_data(df_WHO, selected_year=year_choice, selected_location=country_choice)
+    fig_who = plot_who_data(df_WHO, selected_year=year_choice, selected_location=country_choice, selected_regions = region_choice)
     st.plotly_chart(fig_who, use_container_width=True)
 
 # -------- Data by Country Tab --------

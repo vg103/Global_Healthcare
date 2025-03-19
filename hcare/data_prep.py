@@ -14,6 +14,7 @@ except ImportError:
     from ranking import process_ranking_pipeline
 
 
+
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
     Args: path to the data file

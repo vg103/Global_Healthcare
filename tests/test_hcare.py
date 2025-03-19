@@ -12,7 +12,7 @@ class HcareTest(unittest.TestCase):
     """
     This class tests UI for hcare.py.
     """
-
+    
     def setUp(self):
         """
         The unittest framework automatically runs this setUp function before each test.
@@ -33,12 +33,14 @@ class HcareTest(unittest.TestCase):
     def test_selectbox_ranking_year_home(self):
         """
         Check if the selectbox for ranking years in the Home tab is populated correctly.
+
         """
         years = sorted(self.at.selectbox(key="home_year").options)
         self.assertGreater(len(years), 0)
 
     def test_selectbox_metric_home(self):
         """
+
         Check if the metric selectbox for the composite score over time graph is working.
         """
         expected_metrics = ["composite_score", "rank"]
@@ -55,6 +57,7 @@ class HcareTest(unittest.TestCase):
     def test_plot_compscore_home(self):
         """
         Check if the composite score plot is generated correctly in the Home tab.
+
         """
         chart = self.at.get('plotly_chart')[0]
         self.assertIsNotNone(chart)
@@ -69,11 +72,14 @@ class HcareTest(unittest.TestCase):
     def test_plot_death_vs_doc_home(self):
         """
         Check if the death vs doc plot is generated correctly in the Home tab.
+
         """
         chart = self.at.get('plotly_chart')[1]
         self.assertIsNotNone(chart)
 
+
     # Testing for Tab 2: IHME Data Graph
+
     def test_selectbox_metric_ihme(self):
         """
         Check the selectbox for the metric choice in the IHME Data tab.
@@ -124,14 +130,6 @@ class HcareTest(unittest.TestCase):
         years_who = sorted(self.at.selectbox(key="who_year").options)
         self.assertGreater(len(years_who), 0)
 
-    # def test_multiselect_location_who(self):
-    #     """
-    #     Check the multiselect for selecting locations in the WHO Data tab.
-    #     Note: The widget key in hcare.py is "country_loc" for WHO Data.
-    #     """
-    #     locations = sorted(self.at.multiselect(key="country_loc").options)
-    #     self.assertGreater(len(locations), 0)
-
     def test_plot_who_data(self):
         """
         Check if the plot is generated correctly in the WHO Data tab.
@@ -140,6 +138,7 @@ class HcareTest(unittest.TestCase):
         self.assertIsNotNone(chart)
 
     # Testing for Tab 4: Metrics By Country Graph
+
     def test_selectbox_primary_metric_country(self):
         """
         Check if the primary metric selectbox for the Metrics by Country tab is working.
@@ -185,6 +184,13 @@ class HcareTest(unittest.TestCase):
         widget = widgets[0]
         self.assertGreater(len(widget.options), 0)
 
+    def test_multiselect_location_metric_country(self):
+        """
+        Check the multiselect for selecting locations in metrics by country tab
+        """
+        locations = sorted(self.at.multiselect(key="country_loc").options)
+        self.assertGreater(len(locations), 0)
+
     def test_plot_country_data(self):
         """
         Check if the plot for the Metrics by Country tab is generated correctly.
@@ -193,6 +199,7 @@ class HcareTest(unittest.TestCase):
         self.assertIsNotNone(chart)
 
     # Testing for Tab 5: Metrics Over Time Graph
+
     def test_selectbox_primary_metric_time(self):
         """
         Check if the primary metric selectbox for the Metrics Over Time tab is working.
@@ -243,6 +250,7 @@ class HcareTest(unittest.TestCase):
     def test_plot_country_overview(self):
         """
         Check if the Country Overview plot is generated correctly.
+
         """
         chart = self.at.get('plotly_chart')[6]
         self.assertIsNotNone(chart)

@@ -1,11 +1,16 @@
 """
 Script to make the interactive dashboard for this project.
 """
+import os
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
+# import data_prep.healthcare
+from hcare.data_prep import process_healthcare_data
+
+
 
 # -------------------------
 # Data Loading Function with Standardized Column Names
@@ -14,8 +19,13 @@ import numpy as np
 
 @st.cache_data
 def load_data():
+
+    df_WHO, df_IHME, df_metrics = process_healthcare_data("data_prep/data/")
+
     # Load IHME data
-    df_IHME = pd.read_csv("../data_prep/final_data/final_IHME.csv")
+    # df_IHME = pd.read_csv("../data_prep/final_data/final_IHME.csv")
+    # final_data_path = os.path.join("../data_prep", "final_data")
+    # df_IHME = pd.read_csv(os.path.join(final_data_path, 'final_IHME.csv'))
     df_IHME.columns = df_IHME.columns.str.strip().str.replace('"', '')
     ihme_mapping = {
         "location": "location",
@@ -34,7 +44,7 @@ def load_data():
             f"final_IHME.csv is missing columns: {expected_IHME - set(df_IHME.columns)}")
 
     # Load final WHO data
-    df_WHO = pd.read_csv("../data_prep/final_data/final_who.csv")
+    # df_WHO = pd.read_csv("../data_prep/final_data/final_who.csv")
     df_WHO.columns = df_WHO.columns.str.strip().str.replace('"', '')
     df_WHO = df_WHO.loc[:, ~df_WHO.columns.str.contains("^Unnamed")]
     who_mapping = {
@@ -52,7 +62,7 @@ def load_data():
             f"final_who.csv is missing columns: {expected_WHO - set(df_WHO.columns)}")
 
     # Load inner merged data
-    df_metrics = pd.read_csv("../data_prep/final_data/inner_merged_data.csv")
+    # df_metrics = pd.read_csv("../data_prep/final_data/inner_merged_data.csv")
     df_metrics.columns = df_metrics.columns.str.strip().str.replace('"', '')
     df_metrics = df_metrics.loc[:, ~
                                 df_metrics.columns.str.contains("^Unnamed")]

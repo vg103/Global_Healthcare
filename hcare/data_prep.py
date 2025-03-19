@@ -117,10 +117,10 @@ def process_healthcare_data(file_path):
 
     new_data_who, df_ihme = reconcile_locations(new_data_who, 'Location', df_ihme, 'location')
 
-    final_data_path = os.path.join("data_prep", "final_data")
-    os.makedirs(final_data_path, exist_ok=True)
-    new_data_who.to_csv(os.path.join(final_data_path, 'final_who.csv'), index=False)
-    df_ihme.to_csv(os.path.join(final_data_path, 'final_IHME.csv'), index=False)
+    # final_data_path = os.path.join("data_prep", "final_data")
+    # os.makedirs(final_data_path, exist_ok=True)
+    # new_data_who.to_csv(os.path.join(final_data_path, 'final_who.csv'), index=False)
+    # df_ihme.to_csv(os.path.join(final_data_path, 'final_IHME.csv'), index=False)
 
     both_sources = pd.merge(df_ihme, new_data_who, how="inner",
         left_on=['location','year'],right_on=['Location','Period'])
@@ -128,12 +128,12 @@ def process_healthcare_data(file_path):
     both_sources = both_sources.drop('Location',axis='columns')
     both_sources = both_sources.drop('Period',axis='columns')
 
-    merged_data_path = os.path.join(final_data_path, 'inner_merged_data.csv')
-    both_sources.to_csv(merged_data_path, index=False)
+    # merged_data_path = os.path.join(final_data_path, 'inner_merged_data.csv')
+    # both_sources.to_csv(merged_data_path, index=False)
 
     # Integrate final ranking from ranking.py
-    both_sources = process_ranking_pipeline(merged_data_path)
-    both_sources.to_csv(merged_data_path, index=False)
+    both_sources_rank = process_ranking_pipeline(both_sources)
+    # both_sources.to_csv(merged_data_path, index=False)
 
     return new_data_who, df_ihme, both_sources
 
@@ -141,7 +141,7 @@ def main():
     """Main function to run the code"""
     print(f"Current Directory: {os.getcwd()}")# Check your current working directory
 
-    file_path = os.path.join(os.getcwd(), "data_prep", "data/")
+    file_path = os.path.join(os.getcwd(), "data/")
 
     print(f"File Path: {file_path}")
     # Check if files is found

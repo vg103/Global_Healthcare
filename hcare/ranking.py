@@ -74,7 +74,7 @@ def rank_countries(df, year_col='year', score_col='composite_score'):
     return df
 
 
-def process_ranking_pipeline(filepath):
+def process_ranking_pipeline(df):
     """
     Process the entire ranking pipeline:
       1. Load data.
@@ -83,8 +83,10 @@ def process_ranking_pipeline(filepath):
       4. For each year, derive PCA weights, compute composite score, and rank countries.
     Returns the final DataFrame with composite scores and ranks.
     """
-    # Load the data
-    df = load_data(filepath)
+    # # Load the data
+    # df = load_data(filepath)
+
+    df.columns = df.columns.str.strip().str.lower()
 
     # Define indicator columns (ensure these column names match your CSV file):
     negative_cols = [

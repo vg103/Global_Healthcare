@@ -7,7 +7,13 @@ import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
 
-from data_prep import process_healthcare_data
+
+try:
+    # When running as a package (e.g., during testing)
+    from .data_prep import process_healthcare_data
+except ImportError:
+    # When running as a top-level script (e.g., via streamlit)
+    from data_prep import process_healthcare_data
 
 @st.cache_data
 def load_data():

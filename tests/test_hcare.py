@@ -2,11 +2,21 @@
 This script contains a testing class for UI for the streamlit app in 
 hcare.py
 """
+import sys
+import os
+
+#print("The code is running from:", os.getcwd())
 
 import unittest
 from streamlit.testing.v1 import AppTest
 from json import loads
+from hcare.data_prep import process_healthcare_data
 
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'hcare')))
+
+# Ensure the hcare directory is in sys.path so that “data_prep” can be found.
+current_dir = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(current_dir, "../hcare"))
 
 class HcareTest(unittest.TestCase):
     """
@@ -25,7 +35,7 @@ class HcareTest(unittest.TestCase):
         snake_case naming style
         """
         #pylint: disable=no-member
-        self.at = AppTest.from_file('../hcare/hcare.py').run()
+        self.at = AppTest.from_file('hcare/hcare.py').run(timeout=20)
         print("self.at is type: ", type(self.at))
 
     def test_title(self):
@@ -47,7 +57,7 @@ class HcareTest(unittest.TestCase):
         """
         Check if the metric selectbox for compscore over time graph is working
         """
-        metrics = ["comp_score", "rank"]
+        metrics = ["composite_score", "rank"]
         self.assertEqual(self.at.selectbox(key="home_metric").options, metrics)
 
     def test_multiselect_location_ihme(self):
@@ -105,14 +115,14 @@ class HcareTest(unittest.TestCase):
         """
         Check the multiselect for selecting cause in IHME Data tab
         """
-        causes = sorted(self.at.multiselect(key="ihm_cause").options)
+        causes = sorted(self.at.multiselect(key="ihme_cause").options)
         self.assertGreater(len(causes), 0)
 
     def test_multiselect_sex_ihme(self):
         """
         Check the multiselect for selecting sex in IHME Data tab
         """
-        sexes = sorted(self.at.multiselect(key="ihm_sex").options)
+        sexes = sorted(self.at.multiselect(key="ihme_sex").options)
         self.assertGreater(len(sexes), 0)
 
     def test_plot_ihme_data(self):
@@ -131,12 +141,12 @@ class HcareTest(unittest.TestCase):
         years_who = sorted(self.at.selectbox(key="who_year").options)
         self.assertGreater(len(years_who), 0)
 
-    def test_multiselect_location_who(self):
+    def test_multiselect_region_who(self):
         """
-        Check the multiselect for selecting locations in WHO Data tab
+        Check the multiselect for selecting region in WHO Data tab
         """
-        locations = sorted(self.at.multiselect(key="who_loc").options)
-        self.assertGreater(len(locations), 0)
+        regions = sorted(self.at.multiselect(key="who_region").options)
+        self.assertGreater(len(regions), 0)
 
     def test_plot_who_data(self):
         """

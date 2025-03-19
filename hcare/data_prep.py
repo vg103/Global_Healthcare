@@ -6,7 +6,7 @@ import os
 
 import pandas as pd
 
-from ranking import process_ranking_pipeline
+from hcare.ranking import process_ranking_pipeline
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data
@@ -99,7 +99,7 @@ def process_healthcare_data(file_path):
     """function that processes all data using the functions in this file"""
 
     # makes medical data dataframe (with all provider indicators)
-    med_docs = import_data(os.path.join(file_path, 'medical-doctors.csv'))
+    med_docs = import_data(os.path.join(file_path, r'medical-doctors.csv'))
     nurse_midwifes = import_data(os.path.join(file_path, r'nursery-midwifery.csv'))
     pharms = import_data(os.path.join(file_path, r'pharmacists.csv'))
     dentists = import_data(os.path.join(file_path, r'dentistry.csv'))

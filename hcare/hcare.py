@@ -264,10 +264,6 @@ st.title("Global Healthcare")
 # Load data.
 df_IHME, df_WHO, df_metrics = load_data()
 
-# #delete below line once healthcare.py returns merged csv WITH ranks and scores
-# df_metrics['comp_score'] = np.random.randint(0, 100, size=len(df_metrics))
-# df_metrics['rank'] = np.random.randint(0, 100, size=len(df_metrics))
-
 # (Optional) Debug: Uncomment these lines to inspect standardized column names.
 # st.write("IHME Data Columns:", df_IHME.columns.tolist())
 # st.write("WHO Data Columns:", df_WHO.columns.tolist())

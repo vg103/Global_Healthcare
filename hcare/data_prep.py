@@ -99,7 +99,7 @@ def process_healthcare_data(file_path):
     """function that processes all data using the functions in this file"""
 
     # makes medical data dataframe (with all provider indicators)
-    med_docs = import_data(os.path.join(file_path, 'medical-doctors.csv'))
+    med_docs = import_data(os.path.join(file_path, r'medical-doctors.csv'))
     nurse_midwifes = import_data(os.path.join(file_path, r'nursery-midwifery.csv'))
     pharms = import_data(os.path.join(file_path, r'pharmacists.csv'))
     dentists = import_data(os.path.join(file_path, r'dentistry.csv'))

@@ -6,7 +6,14 @@ import os
 
 import pandas as pd
 
-from hcare.ranking import process_ranking_pipeline
+try:
+    # When running as a package (e.g., during testing)
+    from .ranking import process_ranking_pipeline
+except ImportError:
+    # When running as a top-level script (e.g., via streamlit)
+    from ranking import process_ranking_pipeline
+
+
 
 def import_data(data_path):
     """Reads in data from the specified path and returns a dataframe of the data

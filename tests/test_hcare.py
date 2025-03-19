@@ -48,7 +48,7 @@ class HcareTest(unittest.TestCase):
         years = sorted(self.at.selectbox(key="ihme_year").options)
         self.assertGreater(len(years), 0)
 
-    def test_multiselect_location_ihme(self):
+    def test_multiselect_location_ihme_tab2(self):
         """
         Check the multiselect for selecting locations in IHME Data tab
         """

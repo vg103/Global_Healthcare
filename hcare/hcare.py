@@ -309,7 +309,7 @@ with tabs[0]:
                                      "composite_score", "rank"], key="home_metric")
     available_locations = sorted(df_metrics["location"].dropna().unique())
     location_choice = st.multiselect(
-        "Select Location(s)", options=available_locations, default="United States of America")
+        "Select Location(s)", options=available_locations, default="United States of America", key="home_loc")
     fig_scores_ranks = plot_compscore_over_time(df_metrics, primary_metric = metric_choice, selected_location = location_choice)
     st.plotly_chart(fig_scores_ranks, use_container_width=True)
     st.markdown("---")
@@ -343,10 +343,12 @@ with tabs[1]:
     with col4:
         causes = sorted(df_IHME["cause"].unique())
         default = ["Cardiovascular diseases", "Digestive diseases"]
-        cause_choice = st.multiselect("Select Cause(s)", options=causes, default=default)
+        cause_choice = st.multiselect(
+            "Select Cause(s)", options=causes, default=default, key="ihm_cause")
     with col5:
         sexes = sorted(df_IHME["sex"].unique())
-        sex_choice = st.multiselect("Select Sex Group(s)", options=sexes, default="Both")
+        sex_choice = st.multiselect(
+            "Select Sex Group(s)", options=sexes, default="Both", key="ihm_sex")
 
     fig_ihme = plot_ihme_data(df_IHME, metric=measure_choice,
                               selected_year=year_choice, selected_location=location_choice, selected_cause=cause_choice, selected_sex=sex_choice)
@@ -369,7 +371,7 @@ with tabs[2]:
         countries_who = sorted(df_WHO[(df_WHO["year"]==(year_choice))&(df_WHO["Region"].isin(region_choice))]["location"].unique())
         default = countries_who[:3]
         country_choice = st.multiselect(
-            "Select Location(s)", options=countries_who, default=default)
+            "Select Location(s)", options=countries_who, default=default, key="country_loc")
     fig_who = plot_who_data(df_WHO, selected_year=year_choice, selected_location=country_choice, selected_regions = region_choice)
     st.plotly_chart(fig_who, use_container_width=True)
 

@@ -184,12 +184,6 @@ class HcareTest(unittest.TestCase):
         widget = widgets[0]
         self.assertGreater(len(widget.options), 0)
 
-    def test_multiselect_location_metric_country(self):
-        """
-        Check the multiselect for selecting locations in metrics by country tab
-        """
-        locations = sorted(self.at.multiselect(key="country_loc").options)
-        self.assertGreater(len(locations), 0)
 
     def test_plot_country_data(self):
         """

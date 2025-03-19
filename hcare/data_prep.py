@@ -3,7 +3,9 @@ Code to read in, clean, and merge data from the
     Institute for Health Metrics and Evaluation (IHME) and the World Health Organization (WHO).
 """
 import os
+
 import pandas as pd
+
 from ranking import process_ranking_pipeline
 
 def import_data(data_path):
@@ -62,7 +64,7 @@ def reconcile_locations(who_df, who_col, ihme_df, ihme_col):
         "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
         "Türkiye": "Turkey",
     }
-    
+
     who_df = who_df.copy()
     ihme_df = ihme_df.copy()
 
@@ -135,16 +137,14 @@ def process_healthcare_data(file_path):
     both_sources_rank = process_ranking_pipeline(both_sources)
     # both_sources.to_csv(merged_data_path, index=False)
 
-    return new_data_who, df_ihme, both_sources
+    return new_data_who, df_ihme, both_sources_rank
 
 def main():
-    """Main function to run the code"""
-    print(f"Current Directory: {os.getcwd()}")# Check your current working directory
-
+    """Main function to run the data maninuplation pipeline"""
+    print(f"Current Directory: {os.getcwd()}")
+    # ^Check your current working directory
     file_path = os.path.join(os.getcwd(), "data/")
 
-    print(f"File Path: {file_path}")
-    # Check if files is found
     if os.path.exists(file_path):
         process_healthcare_data(file_path)
     else:

@@ -1,26 +1,22 @@
+"""
+Script to run the ranking algorithm on the inner merged data
+Returns a pandas dataframe with the composite score and rank for each country in each year
+"""
 import pandas as pd
 import numpy as np
+
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 
-
-def load_data(filepath):
-    """
-    Load the dataset from the specified CSV file.
-    """
-    df = pd.read_csv(filepath)
-    df.columns = df.columns.str.strip().str.lower()
-    return df
-
-
 def normalize_data(df, indicator_cols, group_by='year'):
     """
-    Normalize indicator columns within each group (e.g. each year) using MinMax scaling.
+    Normalize indicator columns within each year group using MinMax scaling.
     Returns a DataFrame with normalized indicator values.
     """
     normalized_df = pd.DataFrame()
     scaler = MinMaxScaler()
-    for group, sub_df in df.groupby(group_by):
+    # removed group as a second iterator through df.groupby(group_by)
+    for _,sub_df in df.groupby(group_by):
         sub_df = sub_df.copy()
         sub_df[indicator_cols] = scaler.fit_transform(sub_df[indicator_cols])
         normalized_df = pd.concat([normalized_df, sub_df], ignore_index=True)
@@ -40,19 +36,18 @@ def adjust_negative_indicators(df, negative_cols):
 
 def get_pca_weights(df, indicator_cols):
     """
-    Derive weights for each indicator using PCA on the adjusted data.
-    If there is insufficient data (e.g., only one record), return equal weights.
+    Get weights for each indicator using PCA on the adjusted data.
+    If there is insufficient data, return equal weights.
     """
     features = df[indicator_cols]
     if features.shape[0] < 2:
         return np.ones(len(indicator_cols)) / len(indicator_cols)
-    else:
-        pca = PCA(n_components=1)
-        pca.fit(features)
-        # Use absolute loadings to ensure positive weights and then normalize.
-        weights = np.abs(pca.components_[0])
-        weights = weights / np.sum(weights)
-        return weights
+    pca = PCA(n_components=1)
+    pca.fit(features)
+    # Use absolute loadings to ensure positive weights and then normalize.
+    weights = np.abs(pca.components_[0])
+    weights = weights / np.sum(weights)
+    return weights
 
 
 def compute_composite_score(df, indicator_cols, weights):
@@ -83,9 +78,6 @@ def process_ranking_pipeline(df):
       4. For each year, derive PCA weights, compute composite score, and rank countries.
     Returns the final DataFrame with composite scores and ranks.
     """
-    # # Load the data
-    # df = load_data(filepath)
-
     df.columns = df.columns.str.strip().str.lower()
 
     # Define indicator columns (ensure these column names match your CSV file):
@@ -110,7 +102,7 @@ def process_ranking_pipeline(df):
 
     # Process each year: compute PCA weights, composite score, and rank countries.
     final_results = pd.DataFrame()
-    for year, group in df_adjusted.groupby('year'):
+    for _,group in df_adjusted.groupby('year'):
         group = group.copy()
         weights = get_pca_weights(group, indicator_cols)
         group = compute_composite_score(group, indicator_cols, weights)
@@ -125,10 +117,6 @@ def process_ranking_pipeline(df):
 
 
 if __name__ == '__main__':
-    # File path is relative to the ranking.py file's location
-    filepath = 'data_prep/final_data/inner_merged_data.csv'
-    final_df = process_ranking_pipeline(filepath)
-
-    # Display the key columns: Country, Year, Composite Score, and Rank.
-    # Make sure that the 'country' column matches the column name in your CSV.
-    print(final_df[['location', 'year', 'composite_score', 'rank']])
+    # function above is being called in data_prep.py,
+    # no module functionality needed
+    print("This script is not meant to be run directly.")

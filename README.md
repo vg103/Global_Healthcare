@@ -11,7 +11,6 @@
 
 - How can we assess a country's healthcase infrastructure in order to determine a "rating"?
 - Which countries have the highest rated healthcare systems?
-- What factors contribute to a successful healthcare system?
 - Is there a correlation between the size of a country's medical workforce and its health outcomes?
 
 ### Goal for Project Output:
@@ -26,13 +25,29 @@
 
 ### Environment Set-Up
 For version control, run the following line in the terminal to use package versions as specified in environment.yml:
-    
-    conda env create -f environment.yml
-
+```
+conda env create -f environment.yml
+```
 To activate the environment, run the following:
-
-    conda activate 515final
-
+```
+conda activate 515final
+```
 To update the conda environment after making a change to environment.yml, run the following:
+```
+conda env update -f environment.yml
+```
 
-    conda env update -f environment.yml
+
+### Steps to Open Dashboard
+1. Clone the repository and do set-up and activation of environment by steps above
+
+2. Make sure to be in project folder:
+```
+cd ~/Global_Healthcare
+```
+
+3. Run the streamlit app:
+```
+streamlit run hcare/hcare.py
+```
+This will start a local streamlit server and allow you to open the app by clicking a link provided

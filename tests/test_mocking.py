@@ -3,13 +3,6 @@
 Unit tests for the hcare project modules.
 """
 
-
-from hcare import data_prep, ranking
-from hcare.hcare import (
-    load_data, plot_compscore_over_time, plot_death_vs_docs, plot_ihme_data,
-    plot_who_data, plot_metrics_by_country, plot_metrics_over_time,
-    country_spider,
-)
 import os
 import sys
 import unittest
@@ -19,6 +12,14 @@ from unittest.mock import patch
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+
+
+from hcare import data_prep, ranking
+from hcare.hcare import (
+    load_data, plot_compscore_over_time, plot_death_vs_docs, plot_ihme_data,
+    plot_who_data, plot_metrics_by_country, plot_metrics_over_time,
+    country_spider,
+)
 
 # Local (first-party) imports
 sys.path.insert(

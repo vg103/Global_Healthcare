@@ -7,7 +7,13 @@ import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
 
-from data_prep import process_healthcare_data
+
+try:
+    # When running as a package (e.g., during testing)
+    from .data_prep import process_healthcare_data
+except ImportError:
+    # When running as a top-level script (e.g., via streamlit)
+    from data_prep import process_healthcare_data
 
 @st.cache_data
 def load_data():
@@ -347,10 +353,12 @@ with tabs[1]:
     with col4:
         causes = sorted(df_IHME["cause"].unique())
         default = ["Cardiovascular diseases", "Digestive diseases"]
-        cause_choice = st.multiselect("Select Cause(s)", options=causes, default=default, key="ihme_cause")
+        cause_choice = st.multiselect(
+            "Select Cause(s)", options=causes, default=default, key="ihm_cause")
     with col5:
         sexes = sorted(df_IHME["sex"].unique())
-        sex_choice = st.multiselect("Select Sex Group(s)", options=sexes, default="Both", key="ihme_sex")
+        sex_choice = st.multiselect(
+            "Select Sex Group(s)", options=sexes, default="Both", key="ihm_sex")
 
     fig_ihme = plot_ihme_data(df_IHME, metric=measure_choice,
                               selected_year=year_choice, selected_location=location_choice, selected_cause=cause_choice, selected_sex=sex_choice)

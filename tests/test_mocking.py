@@ -241,7 +241,7 @@ class TestHCare(unittest.TestCase):
             primary_metric="medical_doctors_per_10000",
             secondary_metric="nurses_midwifes_per_10000",
             selected_yr=2000,
-            selected_place=('CountryA',None)
+            selected_place=(['CountryA'],None)
         )
         self.assertIsInstance(fig, go.Figure)
 

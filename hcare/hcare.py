@@ -169,7 +169,7 @@ def plot_who_data(df, selected_year=None, selected_location=None, selected_regio
         df_year = df_year[df_year["location"].isin(selected_location)]
 
     if df_year.empty:
-        print("No data available for the selected year, region(s), and countries combination, try another combination.")
+        st.write("No data available for the selected year, region(s), and countries combination, try another combination.")
 
     categories = [
         ("medical_doctors_per_10000", "Medical Doctors per 10000"),
@@ -195,15 +195,18 @@ def plot_who_data(df, selected_year=None, selected_location=None, selected_regio
     )
     return fig
 
-def plot_metrics_by_country(df, primary_metric="medical_doctors_per_10000", secondary_metric="nurses_midwifes_per_10000", selected_year=None, selected_location=None):
+def plot_metrics_by_country(df, primary_metric="medical_doctors_per_10000", secondary_metric="nurses_midwifes_per_10000",
+    selected_year=None, selected_location=None, selected_region=None):
     if selected_year is None:
         selected_year = df["year"].max()
     df_year = df[df["year"] == selected_year].dropna(
         subset=["location", primary_metric, secondary_metric])
+    if selected_region and len(selected_region)>0:
+        df_year = df_year[df_year["Region"].isin(selected_region)]
     if selected_location:
         df_year = df_year[df_year["location"].isin(selected_location)]
     if df_year.empty:
-        print("No data available for the selected year and location, try another combination.")
+        st.write("No data available for the selected year and location, try another combination.")
 
     fig = go.Figure()
     fig.add_trace(go.Bar(
@@ -278,6 +281,7 @@ st.title("Global Healthcare")
 
 # Load data.
 df_IHME, df_WHO, df_metrics = load_data()
+
 
 # (Optional) Debug: Uncomment these lines to inspect standardized column names.
 # st.write("IHME Data Columns:", df_IHME.columns.tolist())
@@ -377,14 +381,14 @@ with tabs[2]:
         countries_who = sorted(df_WHO[(df_WHO["year"]==(year_choice))&(df_WHO["Region"].isin(region_choice))]["location"].unique())
         default = countries_who[:3]
         country_choice = st.multiselect(
-            "Select Location(s)", options=countries_who, default=default, key="country_loc")
+            "Select Location(s)", options=countries_who, default=default, key="who_loc")
     fig_who = plot_who_data(df_WHO, selected_year=year_choice, selected_location=country_choice, selected_regions = region_choice)
     st.plotly_chart(fig_who, use_container_width=True)
 
 # -------- Data by Country Tab --------
 with tabs[3]:
     st.header("Data by Country")
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     workforce_metrics = [
         "medical_doctors_per_10000",
         "nurses_midwifes_per_10000",
@@ -392,6 +396,7 @@ with tabs[3]:
         "dentists_per_10000"
     ]
     year_choice = None
+    region_choice = None
     with col1:
         primary_metric_choice = st.selectbox(
             "Primary Metric", options=workforce_metrics, index=0, key="country_met_one")
@@ -403,24 +408,29 @@ with tabs[3]:
         year_choice = st.selectbox(
             "Select Year", options=years_metrics, index=len(years_metrics)-1, key="country_year")
     with col4:
-        countries = sorted(df_metrics[df_metrics["year"]==(year_choice)]["location"].unique())
+        regions = sorted(df_metrics["region"].unique())
+        region_choice = st.multiselect("Select Region", options=regions, key="country_region")
+    with col5:
+        countries = sorted(df_metrics[(df_metrics["year"]==(year_choice))&(df_metrics["region"].isin(region_choice))]["location"].unique())
         end = min(10, len(countries)-1)
         default = countries[:end]
         countries_choice = st.multiselect(
-            "Select Location(s)", options=countries, default=default)
+            "Select Location(s)", options=countries, default=default, key="country_loc")
     fig_country = plot_metrics_by_country(
         df_metrics,
         primary_metric=primary_metric_choice,
         secondary_metric=secondary_metric_choice,
         selected_year=year_choice,
-        selected_location=countries_choice
+        selected_location=countries_choice,
+        selected_region = region_choice
     )
     st.plotly_chart(fig_country, use_container_width=True)
 
 # -------- Data Over Time Tab --------
 with tabs[4]:
     st.header("Metrics Over Time")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
+    region_choice = None
     with col1:
         primary_metric_time = st.selectbox(
             "Primary Metric", options=workforce_metrics, index=0, key="over_time_primary")
@@ -428,7 +438,10 @@ with tabs[4]:
         secondary_metric_time = st.selectbox(
             "Secondary Metric", options=workforce_metrics, index=1, key="over_time_secondary")
     with col3:
-        available_locations = sorted(df_metrics["location"].dropna().unique())
+        regions = sorted(df_metrics["region"].unique())
+        region_choice = st.multiselect("Select Region", options=regions, default = "Africa", key="over_time_region")
+    with col4:
+        available_locations = sorted(df_metrics[df_metrics['region'].isin(region_choice)]["location"].dropna().unique())
         location_time_choice = st.multiselect(
             "Select Location(s)", options=available_locations, default=available_locations[:3], key="over_time_loc")
     fig_time = plot_metrics_over_time(
@@ -449,7 +462,9 @@ with tabs[5]:
     #with col1:
     years = sorted(df_WHO[df_WHO["location"]==country]["year"].unique())
     year_choice = st.selectbox("Select Year", options=years, key="spider_year")
-        
+    st.subheader(f"{country} had a composite score of {df_metrics[(df_metrics['location']==country)&(df_metrics['year']==year_choice)]['composite_score'].values[0]} in {year_choice}")
+    st.subheader(f"{country} was ranked {df_metrics[(df_metrics['location']==country)&(df_metrics['year']==year_choice)]['rank'].values[0]} in {year_choice}")
+
     fig_country = country_spider(df_WHO, country, year_choice)
     st.plotly_chart(fig_country, use_container_width=False)
     st.write(f"More in overview for {country} coming soon...")

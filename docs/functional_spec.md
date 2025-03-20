@@ -1,7 +1,7 @@
 # Functional Spec
 
 ### Background
-This dashboard addresses the need for a data backed platform to help various types of users, such as policymakers, journalists, and individuals looking to evaluate healthcare systems worldwide. Since the quality of healthcare varies between countries and over time, this dashboard provides users with valuable insights into these differences. The interactive visualizations and filters enable users to explore data and find answers to their specific questions.
+This dashboard addresses the need for a data backed platform to help various types of users, such as policymakers, journalists, and individuals looking to evaluate healthcare systems worldwide. Currently, it is difficult to quantify how "good" a healthcare system is in a particular country. Since the quality of healthcare varies between countries and over time, this dashboard provides users with valuable insights into these differences. The interactive visualizations and filters enable users to explore data and find answers to their specific questions.
 
 ### User Profiles:
 
@@ -13,6 +13,7 @@ This dashboard addresses the need for a data backed platform to help various typ
 	- not technical, skills include graph comprehension and dashboard navigation
 
 **User 2: Person looking to move to a new country**
+
     - wants to see countries with top healthcare systems
     - interacts by using the dashboard, seeing average stats across all countries, highlighting top countries
     - needs to see which countries are at the top of different categories

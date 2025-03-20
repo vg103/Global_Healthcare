@@ -218,10 +218,9 @@ class TestHCare(unittest.TestCase):
         fig = plot_ihme_data(
             self.df_ihme,
             metric="deaths",
-            selected_year=2000,
+            select_yr_and_sex=(2000,['Both']),
             selected_location=['CountryA'],
             selected_cause=['Cause1'],
-            selected_sex=['Both']
         )
         self.assertIsInstance(fig, go.Figure)
 
@@ -229,7 +228,7 @@ class TestHCare(unittest.TestCase):
         """Test plotting WHO data."""
         fig = plot_who_data(
             self.df_who,
-            selected_year=2000,
+            select_year=2000,
             selected_location=['CountryA'],
             selected_regions=['Region1']
         )
@@ -241,8 +240,8 @@ class TestHCare(unittest.TestCase):
             self.df_metrics,
             primary_metric="medical_doctors_per_10000",
             secondary_metric="nurses_midwifes_per_10000",
-            selected_year=2000,
-            selected_location=['CountryA']
+            selected_yr=2000,
+            selected_place=(['CountryA'],None)
         )
         self.assertIsInstance(fig, go.Figure)
 

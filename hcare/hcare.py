@@ -238,11 +238,8 @@ def plot_metrics_by_country(df, primary_metric="medical_doctors_per_10000",
         selected_yr = df["year"].max()
     df_year = df[df["year"] == selected_yr].dropna(
         subset=["location", primary_metric, secondary_metric])
-    if selected_region and type(selected_region).isin({list, tuple, set})
-        and len(selected_region)>0:
+    if selected_region and len(selected_region)>0:
         df_year = df_year[df_year["region"].isin(selected_region)]
-    elif selected region and type(selected_region) == str:
-        df_year = df_year[df_year["region"] == selected_region]
     if selected_location:
         df_year = df_year[df_year["location"].isin(selected_location)]
     if df_year.empty:

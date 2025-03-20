@@ -467,7 +467,6 @@ with tabs[5]:
 
     fig_country = country_spider(df_WHO, country, year_choice)
     st.plotly_chart(fig_country, use_container_width=False)
-    st.write(f"More in overview for {country} coming soon...")
     #add graphs for country page here
     # print large: most recent algo ranking
     # line plot of score over time, can hover to see exact score for any year

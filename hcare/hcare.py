@@ -141,14 +141,14 @@ def plot_death_vs_docs(df, primary_metric = "deaths",
     fig.update_layout(template="plotly_white")   # Use a clean layout
     return fig
 
-def plot_ihme_data(df, metric="deaths", select_yr_and_sex=tuple(None, None),
+def plot_ihme_data(df, metric="deaths", select_yr_and_sex=(None, None),
     selected_location=None, selected_cause=None):
     """
     Generates a bar plot of the chosen disease metric for the chosen injury causes
     for the selected year and countries
     """
-    select_yr = select_yr_and_sex[0].item()
-    selected_sex = select_yr_and_sex[1].item()
+    select_yr = select_yr_and_sex[0]
+    selected_sex = select_yr_and_sex[1]
     # The IHME data now uses 'deaths' and 'incidence'
     if metric not in ["deaths", "incidence"]:
         raise ValueError("Metric must be 'deaths' or 'incidence'")
@@ -410,7 +410,7 @@ with tabs[1]:
             "Select Sex Group(s)", options=sexes, default="Both", key="ihm_sex")
 
     fig_ihme = plot_ihme_data(df_ihme, metric=measure_choice,
-                select_yr_and_sex=tuple(year_choice, sex_choice),
+                select_yr_and_sex=(year_choice, sex_choice),
                 selected_location=location_choice, selected_cause=cause_choice)
     st.plotly_chart(fig_ihme, use_container_width=True)
 

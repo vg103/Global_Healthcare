@@ -141,7 +141,7 @@ def plot_death_vs_docs(df, primary_metric = "deaths",
     fig.update_layout(template="plotly_white")   # Use a clean layout
     return fig
 
-def plot_ihme_data(df, metric="deaths", select_yr_and_sex=tuple([None], [None]),
+def plot_ihme_data(df, metric="deaths", select_yr_and_sex=tuple(None, None),
     selected_location=None, selected_cause=None):
     """
     Generates a bar plot of the chosen disease metric for the chosen injury causes

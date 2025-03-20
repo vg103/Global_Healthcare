@@ -218,7 +218,7 @@ class TestHCare(unittest.TestCase):
         fig = plot_ihme_data(
             self.df_ihme,
             metric="deaths",
-            selected_yr_and_sex=(2000,'Both'),
+            select_yr_and_sex=(2000,'Both'),
             selected_location=['CountryA'],
             selected_cause=['Cause1'],
         )

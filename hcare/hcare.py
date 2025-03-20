@@ -410,7 +410,7 @@ with tabs[1]:
             "Select Sex Group(s)", options=sexes, default="Both", key="ihm_sex")
 
     fig_ihme = plot_ihme_data(df_ihme, metric=measure_choice,
-                select_yr_and_sex=[year_choice, sex_choice],
+                select_yr_and_sex=(year_choice, sex_choice),
                 selected_location=location_choice, selected_cause=cause_choice)
     st.plotly_chart(fig_ihme, use_container_width=True)
 
@@ -475,7 +475,7 @@ with tabs[3]:
         primary_metric=primary_metric_choice,
         secondary_metric=secondary_metric_choice,
         selected_yr=year_choice,
-        selected_place=[countries_choice, region_choice]
+        selected_place=(countries_choice, region_choice)
     )
     st.plotly_chart(fig_country, use_container_width=True)
 
